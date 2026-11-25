@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mox · A2 · The Building, centered</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one centered column, like today's moxsf.com. The building drawing sits behind the hero; the elevator indicator is the navigation. */
+:root{
+  --paper:#F9FAFA; --card:#FFFFFF; --concrete:#E0E1E2; --ink:#1E1B18; --ink-2:#5B5550; --rule:#D6D6D3;
+  --rust:#7A3305; --rust-2:#5E2703; --signal:#EB5809; --green:#4C7D52;
+  --display:"Libre Caslon Display","Libre Caslon Text",Georgia,serif;
+  --text:"Libre Caslon Text",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.col{max-width:1000px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.1;text-wrap:balance}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding:12px 18px;border:1px solid var(--rust);border-radius:2px;transition:transform .12s,box-shadow .12s,background .2s}
+.btn.solid{background:var(--rust);color:#fff;box-shadow:0 3px 0 var(--rust-2)}
+.btn.solid:hover{background:#8A3B07}
+.btn.solid:active{transform:translateY(3px);box-shadow:none}
+.btn.line{color:var(--rust);background:var(--card)}
+.btn.line:hover{background:#F6EEE8}
+
+/* Top strip */
+.top{display:flex;justify-content:flex-end;align-items:center;gap:22px;padding-block:14px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;position:relative;z-index:2}
+.top a.l{text-decoration:none;color:var(--ink-2)}
+.top a.l:hover{color:var(--ink)}
+
+/* Hero: centered lockup over the drawing */
+.stage{position:relative;overflow:hidden;padding-bottom:8px}
+.hero{position:relative;text-align:center;padding-block:18px 52px}
+.bg{position:absolute;left:50%;top:-10px;width:min(1500px,170vw);aspect-ratio:690/600;transform:translateX(-50%);pointer-events:none}
+.bg .lines{position:absolute;inset:0;background:var(--ink);opacity:.13;-webkit-mask:url(img/sketch.png) no-repeat center/contain;mask:url(img/sketch.png) no-repeat center/contain}
+.win{position:absolute;background:#F3A35B;opacity:0;animation:glow 16s ease-in-out infinite}
+@keyframes glow{0%,15%{opacity:0}30%,70%{opacity:.32}85%,100%{opacity:0}}
+.fade{position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,var(--paper))}
+.hero .in{position:relative}
+.lockup{display:inline-flex;align-items:center;gap:18px;text-decoration:none}
+.mark{width:132px;height:108px;background:var(--ink);-webkit-mask:url(img/mark.svg) no-repeat center/contain;mask:url(img/mark.svg) no-repeat center/contain}
+.word{font-family:var(--display);font-size:104px;line-height:1;letter-spacing:-.01em}
+.tag{font-size:clamp(19px,2.1vw,23px);margin:22px auto 0;max-width:30em;line-height:1.5}
+.tag em{font-weight:700;color:var(--rust);white-space:nowrap}
+.addr{display:inline-flex;align-items:center;gap:9px;margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,125,82,.45)}70%{box-shadow:0 0 0 9px rgba(76,125,82,0)}100%{box-shadow:0 0 0 0 rgba(76,125,82,0)}}
+.ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px}
+@media (max-width:620px){.mark{width:76px;height:62px}.word{font-size:62px}.lockup{gap:10px}}
+
+/* Three cards, all the same size */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative;margin-top:-8px}
+.card{background:var(--card);border:1px solid var(--rule);display:flex;flex-direction:column;min-width:0;box-shadow:0 1px 0 var(--rule),0 22px 34px -30px rgba(30,27,24,.5)}
+.card .ph{aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--rule)}
+.card .ph img{width:100%;height:100%;object-fit:cover;animation:drift 28s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.03)}to{transform:scale(1.09) translate(-1.5%,-1%)}}
+.card .b{padding:20px 20px 18px;display:flex;flex-direction:column;flex:1;text-align:center}
+.card h3{font-size:25px;margin-bottom:14px}
+.card .body{flex:1;text-align:left}
+.card .foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.card .foot a{color:var(--rust);text-decoration:none}
+.card .foot a:hover{text-decoration:underline}
+.ev{list-style:none;margin:0;padding:0}
+.ev li{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #EEEEEC;font-size:14.5px;line-height:1.3}
+.ev li:last-child{border-bottom:0}
+.ev .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-align:center;border:1px solid var(--ink);padding:3px 0;line-height:1.25}
+.ev .d b{display:block;font-weight:500}
+.card .who{text-align:center;display:grid;grid-template-columns:1fr 1fr;font-size:14.5px;text-align:center;align-content:start}
+.who span{padding:7px 4px;border-bottom:1px solid #EEEEEC}
+.who span:nth-child(odd){border-right:1px solid #EEEEEC}
+.ways{display:flex;flex-direction:column;gap:8px}
+.ways .btn{width:100%}
+.ways .hint{font-size:13.5px;color:var(--ink-2);text-align:center;margin-top:4px}
+@media (max-width:860px){.three{grid-template-columns:1fr;max-width:460px;margin-inline:auto}}
+
+/* Sections */
+section{padding-block:76px 0;text-align:center}
+.floor{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.floor b{display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;color:var(--ink);font-weight:500}
+section h2{font-size:clamp(32px,4vw,46px);margin-top:12px}
+section .sub{color:var(--ink-2);max-width:34em;margin:12px auto 0}
+
+/* Photo grid: one rhythm, no ragged edges */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:32px}
+.photos figure{margin:0;overflow:hidden;aspect-ratio:4/3;background:var(--concrete)}
+.photos figure.tall{grid-row:span 2;aspect-ratio:auto}
+.photos img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.photos figure:hover img{transform:scale(1.03)}
+@media (max-width:620px){.photos{grid-template-columns:1fr 1fr}.photos figure.tall{grid-row:auto;aspect-ratio:4/3}}
+
+/* Humans */
+.quote{font-family:var(--display);font-size:clamp(26px,3.2vw,38px);line-height:1.25;max-width:22em;margin:26px auto 0;min-height:2.6em}
+.quote .what{font-family:var(--text);font-style:italic;color:var(--rust)}
+.quote span{transition:opacity .6s}
+.quote.out span{opacity:0}
+.humans{margin-top:34px;text-align:left;border-top:1px solid var(--ink)}
+.h{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--concrete);display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.h .n{font-size:16px}
+.h .n b{font-weight:700}
+.h .n i{color:var(--rust)}
+.h .r{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);text-align:right}
+@media (max-width:560px){.h{grid-template-columns:44px 1fr}.h .r{grid-column:2;text-align:left}}
+.counts{display:flex;justify-content:center;gap:36px;margin-top:24px;flex-wrap:wrap}
+.counts b{display:block;font-family:var(--display);font-weight:400;font-size:42px;line-height:1}
+.counts span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-2)}
+
+/* Directory board */
+.board{max-width:560px;margin:32px auto 0;background:#22201E;border:10px solid #3B3733;border-radius:4px;padding:20px 24px;color:#F2EFEA;font-family:var(--mono);font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;text-align:left;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 22px)}
+.board h4{margin:0 0 12px;font-weight:500;text-align:center;letter-spacing:.3em}
+.board .row{display:flex;justify-content:space-between;gap:16px;line-height:22px}
+.board .row span:last-child{color:#E7D7B8}
+.board .fl{color:#9A948C;margin-top:8px}
+.partners{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-top:28px;font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+
+.close{padding-block:80px;text-align:center}
+.close h2{font-size:clamp(34px,4.4vw,52px)}
+footer{border-top:1px solid var(--rule);padding-block:24px 90px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+
+/* Elevator indicator */
+.elevator{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:14px;padding:9px 16px;border-radius:6px;
+  background:linear-gradient(180deg,#EDEEEF 0%,#C9CBCD 48%,#DADCDD 52%,#BFC1C3 100%);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 #9FA2A5,0 10px 24px -12px rgba(0,0,0,.45);font-family:var(--mono)}
+.elevator a{font-size:19px;line-height:1;text-decoration:none;color:#45484B;font-weight:500;transition:color .35s,text-shadow .35s}
+.elevator a.on{color:var(--signal);text-shadow:0 0 8px rgba(235,88,9,.75)}
+.elevator .lbl{font-size:10px;letter-spacing:.14em;color:#45484B;text-transform:uppercase;border-left:1px solid #A9ACAF;padding-left:12px;min-width:78px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="col top"><a class="l" href="#events">Events</a><a class="l" href="#humans">Humans</a><a class="btn solid" href="#" style="padding:8px 14px">Login</a></div>
+
+<div class="stage">
+<div class="bg" aria-hidden="true">
+    <div class="lines"></div>
+    <span class="win" style="left:57.2%;top:38.6%;width:5.9%;height:6%"></span>
+    <span class="win" style="left:66%;top:48.2%;width:5.9%;height:6%;animation-delay:-6s"></span>
+    <span class="win" style="left:57.2%;top:58.2%;width:5.9%;height:6%;animation-delay:-11s"></span>
+    <div class="fade"></div>
+  </div>
+<header class="hero">
+  <div class="col in">
+    <a class="lockup" href="#" aria-label="Mox"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>
+    <p class="tag">A research-focused incubator &amp; community space for <em>doers of good</em> and <em>masters of craft</em>.</p>
+    <a class="addr" href="#"><span class="dot" aria-hidden="true"></span>Open today · 1680 Mission Street, San Francisco</a>
+    <div class="ctas"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Book a day pass</a></div>
+  </div>
+</header>
+<div class="col">
+  <div class="three" id="events">
+    <article class="card">
+      <div class="ph"><img src="img/screen.jpg" alt="The big room set up for a film night"></div>
+      <div class="b"><h3>Upcoming events</h3>
+        <ul class="ev body">
+          <li><span class="d"><b>WED</b>4PM</span>Mox-Giving</li>
+          <li><span class="d"><b>WED</b>5PM</span>AI-Philosophy Writing Group</li>
+          <li><span class="d"><b>FRI</b>6PM</span>Band Setup + Practice</li>
+          <li><span class="d"><b>SAT</b>7PM</span>Mox-tunies! Live Band Karaoke</li>
+          <li><span class="d"><b>MON</b>7PM</span>SF Lean Meetup</li>
+        </ul>
+        <div class="foot"><a href="#">All events →</a></div></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img src="img/whiteboard.jpg" alt="Whiteboard asking what makes a problem important" style="animation-delay:-9s"></div>
+      <div class="b"><h3>Who we gather</h3>
+        <div class="who body"><span>Alignment researchers</span><span>Startup founders</span><span>Effective altruists</span><span>Writers</span><span>Filmmakers</span><span>Musicians</span><span>Community builders</span><span>Hackers</span><span>Designers</span><span>Gamers</span></div>
+        <div class="foot"><a href="#humans">See people →</a></div></div>
+    </article>
+    <article class="card">
+      <div class="ph"><img src="img/desks.jpg" alt="Desks with monitors by tall curtained windows" style="animation-delay:-16s"></div>
+      <div class="b"><h3>Space for meaningful work</h3>
+        <div class="ways body">
+          <a class="btn solid" href="#">Apply for membership</a>
+          <a class="btn line" href="#">Inquire about offices</a>
+          <a class="btn line" href="#">Buy a day pass</a>
+          <a class="btn line" href="#">Host an event</a>
+          <p class="hint">Not sure which? Start with a day pass.</p>
+        </div>
+        <div class="foot"><a href="#">Member portal →</a></div></div>
+    </article>
+  </div>
+</div>
+</div>
+<main class="col">
+  <section id="space" data-floor="1" data-name="The space">
+    <span class="floor"><b>1</b>The space</span>
+    <h2>Four floors on Mission Street.</h2>
+    <p class="sub">Desks by the windows, a lounge, rooms for focus, and a big room for talks and film nights.</p>
+    <div class="photos">
+      <figure class="tall"><img src="img/door.jpg" alt="The gold front doors of 1680 Mission Street"></figure>
+      <figure><img src="img/lounge.jpg" alt="Lounge with low orange sofas"></figure>
+      <figure><img src="img/screen.jpg" alt="The big room"></figure>
+      <figure><img src="img/frame.jpg" alt="Framed historic drawing of the building"></figure>
+      <figure><img src="img/stairs.jpg" alt="Stairwell to the third floor"></figure>
+    </div>
+  </section>
+
+  <section id="humans" data-floor="2" data-name="Humans">
+    <span class="floor"><b>2</b>Mox humans</span>
+    <h2>Who you'll meet in the kitchen.</h2>
+    <p class="quote" id="quote" aria-live="polite"><span>Lily Shi</span> <span>is into</span> <span class="what">LLM interpretability</span> <span>and</span> <span class="what">dance</span>.</p>
+    <div class="counts"><div><b>215</b><span>MEMBERS</span></div><div><b>21</b><span>RESIDENT TEAMS</span></div><div><b>4</b><span>FELLOWSHIPS</span></div></div>
+    <div class="humans">
+      <div class="h"><span class="av">RG</span><span class="n"><b>Robin Goins</b> is into <i>understanding understanding</i></span><span class="r">Operations · membership, offices</span></div>
+      <div class="h"><span class="av">CO</span><span class="n"><b>Carolina Oliveira</b></span><span class="r">Community · fellowships, events</span></div>
+      <div class="h"><span class="av">LB</span><span class="n"><b>Leilani Bellamy</b> is into <i>Art of Accomplishment</i> and <i>niche bodywork</i></span><span class="r">Director · partnerships</span></div>
+      <div class="h"><span class="av">JN</span><span class="n"><b>Jez Ng</b> is into <i>building the fastest Mach-O linker</i> and <i>growing mushrooms</i></span><span class="r">Member</span></div>
+      <div class="h"><span class="av">KG</span><span class="n"><b>Kris Gulati</b> is into <i>economics of AI</i> and <i>origami</i></span><span class="r">Member</span></div>
+    </div>
+    <a class="btn line" href="#" style="margin-top:22px">See all 215 humans</a>
+  </section>
+
+  <section id="directory" data-floor="3" data-name="Teams">
+    <span class="floor"><b>3</b>Directory</span>
+    <h2>Teams that call Mox home.</h2>
+    <div class="board" role="table" aria-label="Building directory">
+      <h4>1680 · DIRECTORY</h4>
+      <div class="row fl"><span>— Floor 2 —</span><span></span></div>
+      <div class="row"><span>Gutenberg</span><span>201</span></div>
+      <div class="row"><span>Netholabs</span><span>203</span></div>
+      <div class="row"><span>Neolithic</span><span>205</span></div>
+      <div class="row fl"><span>— Floor 3 —</span><span></span></div>
+      <div class="row"><span>Haptica · Deep AI</span><span>302</span></div>
+      <div class="row"><span>Tampersec</span><span>304</span></div>
+      <div class="row"><span>Confluence</span><span>306</span></div>
+      <div class="row fl"><span>— Floor 4 —</span><span></span></div>
+      <div class="row"><span>hum.ai</span><span>404</span></div>
+      <div class="row"><span>Sentient Futures</span><span>408–409</span></div>
+      <div class="row"><span>Tabula Bio</span><span>411</span></div>
+      <div class="row"><span>Stardrift</span><span>412</span></div>
+    </div>
+    <div class="partners"><span>ACX Grants</span><span>Elicit</span><span>AI Impacts</span><span>Roots of Progress</span><span>Epoch</span><span>Lightcone</span><span>GovAI</span><span>ARC</span><span>Redwood</span><span>Palisade</span><span>Timaeus</span><span>Seldon</span></div>
+  </section>
+
+  <section class="close" data-floor="4" data-name="Join">
+    <span class="floor"><b>4</b>Join</span>
+    <h2 style="margin-top:12px">Come work on what matters.</h2>
+    <p class="sub">Questions about fit? Write to robin@moxsf.com.</p>
+    <div class="ctas"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Inquire about offices</a></div>
+  </section>
+</main>
+<footer>A project of Manifund · Donate · 1680 Mission Street, San Francisco</footer>
+
+<nav class="elevator" aria-label="Floors">
+  <a href="#space" data-f="1">1</a><a href="#humans" data-f="2">2</a><a href="#directory" data-f="3">3</a><a href="#" data-f="4" id="f4">4</a>
+  <span class="lbl" id="flbl">Lobby</span>
+</nav>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.elevator a')),lbl=document.getElementById('flbl'),secs=[].slice.call(document.querySelectorAll('section[data-floor]'));
+  document.getElementById('f4').addEventListener('click',function(e){e.preventDefault();document.querySelector('.close').scrollIntoView()});
+  function upd(){var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){if(s.offsetTop<=mid){f=+s.dataset.floor;n=s.dataset.name}});links.forEach(function(a){a.classList.toggle('on',+a.dataset.f===f)});lbl.textContent=n}
+  addEventListener('scroll',upd,{passive:true});upd();
+  var ppl=[["Lily Shi","LLM interpretability","dance"],["Leona Mollica","decision theory foundations","calligraphy"],["Timothy Zhou","LLM jailbreak interpretability","composing chamber music"],["Ran Sun","US/China AI safety coordination","rock climbing"],["William Jarrold","mechanistic interpretability","jazz piano"],["Avi Sundaresan","world-state compression","espresso"]];
+  var q=document.getElementById('quote'),i=0;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(function(){q.classList.add('out');setTimeout(function(){i=(i+1)%ppl.length;var s=q.querySelectorAll('span');s[0].textContent=ppl[i][0];s[2].textContent=ppl[i][1];s[4].textContent=ppl[i][2];q.classList.remove('out')},650)},4800);
+})();
+</script>
+</body>
+</html>
