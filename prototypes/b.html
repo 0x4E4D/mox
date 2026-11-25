@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mox · Direction B · Control Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Doto:wght@700;900&display=swap">
+<style>
+/* Layout: a hardware spec sheet. Concrete-grey chassis on a drafting grid, inset screens, physical keys; serif headlines keep it editorial. */
+:root{
+  --chassis:#E0E1E2; --panel:#F4F4F2; --ink:#161616; --ink-2:#5D6063; --line:#C4C6C8;
+  --signal:#EB5809; --signal-2:#B94204; --rust:#7A3305; --green:#4C7D52; --screen:#0E0F0F; --amber:#FF8A2B;
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --dots:"Doto","IBM Plex Mono",monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-color:var(--chassis);
+  background-image:linear-gradient(rgba(22,22,22,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(22,22,22,.055) 1px,transparent 1px);
+  background-size:24px 24px}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono)}
+.lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;line-height:1.02;text-wrap:balance}
+h2{font-size:clamp(38px,5vw,64px)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+/* Top bar */
+.top{display:flex;align-items:center;gap:20px;height:64px;border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.mark{width:40px;height:33px;background:var(--ink);-webkit-mask:url(img/mark.svg) no-repeat center/contain;mask:url(img/mark.svg) no-repeat center/contain}
+.word{font-family:var(--serif);font-size:30px;line-height:1}
+.top nav{margin-left:auto;display:flex;gap:4px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.top nav a{text-decoration:none;padding:8px 10px;border-radius:4px;color:var(--ink-2)}
+.top nav a:hover{background:var(--panel);color:var(--ink)}
+.status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-2)}
+.led{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(76,125,82,.9);animation:blink 4s steps(1) infinite}
+@keyframes blink{0%,92%{opacity:1}93%,96%{opacity:.25}97%{opacity:1}}
+@media (max-width:900px){.top nav{display:none}.status{margin-left:auto}}
+
+/* Pushable key (tactile) */
+.key{--face:var(--panel);--edge:#A9ABAE;--txt:var(--ink);position:relative;display:inline-block;border:0;padding:0;background:transparent;cursor:pointer;text-decoration:none;font:inherit;outline-offset:6px}
+.key .shadow{position:absolute;inset:0;border-radius:8px;background:rgba(0,0,0,.22);transform:translateY(3px);filter:blur(3px);transition:transform .25s cubic-bezier(.3,.7,.4,1)}
+.key .edge{position:absolute;inset:0;border-radius:8px;background:var(--edge)}
+.key .face{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:14px 22px;border-radius:8px;background:var(--face);color:var(--txt);
+  font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;transform:translateY(-5px);transition:transform .25s cubic-bezier(.3,.7,.4,1);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+.key:hover .face{transform:translateY(-7px)}
+.key:hover .shadow{transform:translateY(5px)}
+.key:active .face{transform:translateY(-1px);transition-duration:34ms}
+.key:active .shadow{transform:translateY(1px);transition-duration:34ms}
+.key.orange{--face:var(--signal);--edge:var(--signal-2);--txt:#fff}
+.key.dark{--face:#2A2B2C;--edge:#0C0C0C;--txt:#F4F4F2}
+.key[aria-pressed="true"] .face{transform:translateY(-1px)}
+.key[aria-pressed="true"] .face::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 6px var(--signal)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;padding-block:56px 64px;align-items:center}
+.hero h1{font-size:clamp(46px,6.4vw,92px)}
+.hero h1 i{color:var(--rust)}
+.hero p{font-size:18px;color:var(--ink-2);max-width:32em;margin:22px 0 30px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:14px}
+.specline{display:flex;gap:18px;flex-wrap:wrap;margin-top:30px;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.specline b{color:var(--ink);font-weight:500}
+.hero>*{min-width:0}
+@media (max-width:920px){.hero{grid-template-columns:1fr;padding-block:32px 40px}}
+
+/* Device */
+.device{background:linear-gradient(180deg,#F1F1EF,#DCDDDE);border-radius:18px;padding:18px;box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #B9BBBD,0 30px 50px -30px rgba(0,0,0,.5),0 2px 0 #A9ABAE}
+.device .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.device .head .lab{font-size:10px}
+.screw{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#9C9EA0);box-shadow:inset 0 0 0 1px #8D8F92}
+.bezel{background:#1B1C1D;border-radius:10px;padding:12px;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 1px 0 #fff}
+.board{background:var(--screen);border-radius:4px;padding:14px 16px;position:relative;overflow:hidden;min-height:250px}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),radial-gradient(120% 90% at 50% 40%,transparent 60%,rgba(0,0,0,.55))}
+.brow{display:grid;grid-template-columns:3.2em 3.6em 1fr;gap:12px;font-family:var(--dots);font-weight:700;font-size:clamp(15px,1.9vw,21px);line-height:1.5;color:var(--amber);text-shadow:0 0 6px rgba(255,138,43,.65);text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.brow .n{overflow:hidden;text-overflow:clip}
+.brow.hd{color:#7C5A3C;text-shadow:none;font-size:12px;font-family:var(--mono);letter-spacing:.12em;border-bottom:1px dashed #3A2A1C;padding-bottom:6px;margin-bottom:6px}
+.brow.flip .n{animation:flip .5s steps(3)}
+@keyframes flip{0%{opacity:.1}50%{opacity:.6}100%{opacity:1}}
+.ticker{margin-top:8px;font-family:var(--dots);font-weight:700;color:#FF5A1F;text-shadow:0 0 6px rgba(255,90,31,.7);font-size:15px;white-space:nowrap;overflow:hidden}
+.ticker span{display:inline-block;padding-left:100%;animation:tick 28s linear infinite}
+@keyframes tick{to{transform:translateX(-100%)}}
+.device .controls{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+.speaker{width:64px;height:30px;background-image:radial-gradient(#7E8083 1.4px,transparent 1.6px);background-size:7px 7px;opacity:.9}
+
+/* Section scaffolding */
+section{padding-block:72px;border-top:1px solid var(--line)}
+.sh{display:grid;grid-template-columns:140px 1fr;gap:28px;margin-bottom:36px}
+.sh .idx{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--ink-2);padding-top:12px;border-top:2px solid var(--ink);align-self:start}
+.sh p{color:var(--ink-2);max-width:38em;margin:14px 0 0;font-size:17px}
+@media (max-width:760px){.sh{grid-template-columns:1fr;gap:12px}.sh .idx{border-top:0;padding-top:0}}
+
+/* Ways in: key selector + readout */
+.ways{display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:stretch}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;align-content:start;background:var(--panel);padding:20px;border-radius:14px;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD}
+.keys .key .face{min-height:76px;flex-direction:column;align-items:flex-start;justify-content:space-between;text-align:left;padding:12px 14px;font-size:12px}
+.keys .key .face small{font-size:10px;color:var(--ink-2);letter-spacing:.1em}
+.keys .key.dark .face small{color:#9EA1A4}
+.readout{background:var(--panel);border-radius:14px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:28px;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD;min-width:0}
+.readout h3{font-size:44px}
+.readout .desc{color:var(--ink-2);margin:12px 0 22px;font-size:17px}
+.readout dl{margin:0;display:grid;grid-template-columns:auto 1fr;font-family:var(--mono);font-size:13px;border-top:1px solid var(--line)}
+.readout dt,.readout dd{padding:10px 0;border-bottom:1px solid var(--line);margin:0}
+.readout dt{color:var(--ink-2);padding-right:18px;text-transform:uppercase;letter-spacing:.08em;font-size:11px;padding-top:12px}
+.lcd{background:#C9D2C2;border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:13px;color:#26302A;box-shadow:inset 0 2px 4px rgba(0,0,0,.25);margin-bottom:20px}
+@media (max-width:920px){.ways{grid-template-columns:1fr}.readout{grid-template-columns:1fr}}
+
+/* Spec table */
+.spec{display:grid;grid-template-columns:repeat(4,1fr);background:var(--panel);border-radius:14px;overflow:hidden;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD}
+.spec div{padding:22px 22px 20px;border-right:1px solid var(--line)}
+.spec div:last-child{border-right:0}
+.spec b{display:block;font-family:var(--serif);font-weight:400;font-size:58px;line-height:1;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.spec{grid-template-columns:1fr 1fr}.spec div:nth-child(2){border-right:0}.spec div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* Monitor + terminal */
+.duo{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;margin-top:28px;align-items:stretch}
+.monitor{background:linear-gradient(180deg,#2B2C2D,#1A1B1C);border-radius:16px;padding:16px 16px 12px;box-shadow:0 30px 50px -30px rgba(0,0,0,.6);display:flex;flex-direction:column;min-width:0}
+.tube{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:#000;box-shadow:inset 0 0 0 1px #000}
+.tube img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease;filter:saturate(.9) contrast(1.03)}
+.tube img.on{opacity:1}
+.tube::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 1px,transparent 1px 3px),radial-gradient(130% 100% at 50% 50%,transparent 62%,rgba(0,0,0,.5))}
+.tube .ch{position:absolute;top:10px;right:12px;font-family:var(--dots);font-weight:900;font-size:22px;color:#9DFFA8;text-shadow:0 0 6px rgba(157,255,168,.7);z-index:2}
+.mrow{display:flex;justify-content:space-between;align-items:center;margin-top:12px;color:#9EA1A4;gap:12px}
+.mrow .lab{color:#9EA1A4}
+.knob{width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 40% 35%,#5A5C5E,#232425);box-shadow:0 3px 0 #0C0C0C,inset 0 1px 0 rgba(255,255,255,.25);position:relative;transition:transform .35s cubic-bezier(.3,.7,.4,1)}
+.knob::after{content:"";position:absolute;left:50%;top:5px;width:3px;height:11px;margin-left:-1.5px;border-radius:2px;background:var(--signal)}
+.knob:active{box-shadow:0 1px 0 #0C0C0C,inset 0 1px 0 rgba(255,255,255,.25)}
+.term{background:var(--screen);border-radius:14px;padding:20px 22px;font-family:var(--mono);font-size:14px;color:#D9DAD7;line-height:1.75;min-height:360px;box-shadow:inset 0 0 0 1px #000,0 30px 50px -30px rgba(0,0,0,.6);overflow:hidden;min-width:0}
+.term .p{color:var(--amber)}
+.term .k{color:#8FD19E}
+.term .c{display:inline-block;width:.6em;height:1.1em;background:#D9DAD7;vertical-align:-2px;animation:cur 1.1s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.term .line{white-space:normal}
+@media (max-width:920px){.duo{grid-template-columns:1fr}}
+@media (max-width:560px){.brow{font-size:14px;grid-template-columns:2.4em 2.8em 1fr;gap:8px}.term{font-size:12px;min-height:0;max-height:330px}.board{min-height:200px}}
+
+/* Directory table */
+.dir{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.tbl{background:var(--panel);border-radius:14px;padding:6px 22px;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD;font-family:var(--mono);font-size:13px}
+.tbl .r{display:grid;grid-template-columns:1fr auto;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}
+.tbl .r:last-child{border-bottom:0}
+.tbl .r span:last-child{color:var(--ink-2);font-variant-numeric:tabular-nums}
+@media (max-width:760px){.dir{grid-template-columns:1fr}}
+
+/* Closing panel */
+.final{background:var(--ink);color:#F4F4F2;border-radius:20px;padding:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:center}
+.final h2{color:#fff}
+.final p{color:#B5B8BB;margin:14px 0 0}
+.final .ctas{display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-end}
+@media (max-width:760px){.final{grid-template-columns:1fr;padding:28px}.final .ctas{justify-content:flex-start}}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-block:28px 40px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-2);text-transform:uppercase}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="logo" href="#" aria-label="Mox home"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>
+    <nav aria-label="Main"><a href="#ways">Membership</a><a href="#ways">Offices</a><a href="#events">Events</a><a href="#people">People</a><a href="#teams">Teams</a><a href="#">Login</a></nav>
+    <span class="status"><span class="led" aria-hidden="true"></span>OPEN · 1680 MISSION ST</span>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="lab">MOX/SF · Research incubator · Community space</div>
+      <h1 style="margin-top:16px">Built for doers of good and <i>masters of craft.</i></h1>
+      <p>A four-floor building in San Francisco for people working on AI safety and other things that matter. Desks, offices, a big room for events, and 215 people worth meeting.</p>
+      <div class="ctas">
+        <a class="key orange" href="#ways"><span class="shadow"></span><span class="edge"></span><span class="face">Apply for membership</span></a>
+        <a class="key" href="#ways"><span class="shadow"></span><span class="edge"></span><span class="face">Book a day pass</span></a>
+      </div>
+      <div class="specline"><span><b>215</b> members</span><span><b>21</b> resident teams</span><span><b>4</b> fellowships</span><span><b>16</b> partner orgs</span></div>
+    </div>
+
+    <div class="device" id="events" aria-label="This week's events">
+      <div class="head"><span class="screw"></span><span class="lab">Departures · This week at Mox</span><span class="screw"></span></div>
+      <div class="bezel">
+        <div class="board" id="board">
+          <div class="brow hd"><span>DAY</span><span>TIME</span><span>EVENT</span></div>
+        </div>
+        <div class="ticker" aria-hidden="true"><span>MOST EVENTS ARE OPEN TO THE PUBLIC · MEMBERS GET FIRST SEATS · HOST YOUR OWN: ASK ROBIN · </span></div>
+      </div>
+      <div class="controls">
+        <span class="speaker" aria-hidden="true"></span>
+        <a class="key dark" href="#"><span class="shadow"></span><span class="edge"></span><span class="face">All events →</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="ways">
+  <div class="wrap">
+    <div class="sh"><span class="idx">01 · ACCESS</span><div><h2>Choose how you'll use the building.</h2><p>Four modes. Press one to see what it includes and how to start.</p></div></div>
+    <div class="ways">
+      <div class="keys" role="group" aria-label="Ways in">
+        <button class="key dark" data-m="0" aria-pressed="true"><span class="shadow"></span><span class="edge"></span><span class="face">Member<small>M-01</small></span></button>
+        <button class="key" data-m="1" aria-pressed="false"><span class="shadow"></span><span class="edge"></span><span class="face">Office<small>O-02</small></span></button>
+        <button class="key" data-m="2" aria-pressed="false"><span class="shadow"></span><span class="edge"></span><span class="face">Day pass<small>D-03</small></span></button>
+        <button class="key" data-m="3" aria-pressed="false"><span class="shadow"></span><span class="edge"></span><span class="face">Event<small>E-04</small></span></button>
+      </div>
+      <div class="readout" aria-live="polite">
+        <div>
+          <div class="lab" id="r-k">Mode M-01 · most people start here</div>
+          <h3 id="r-h" style="margin-top:10px">Membership</h3>
+          <p class="desc" id="r-d">A desk, the kitchen, the library and the people. For independent researchers and builders working on things that matter.</p>
+          <a class="key orange" id="r-a" href="#"><span class="shadow"></span><span class="edge"></span><span class="face" id="r-b">Apply for membership</span></a>
+        </div>
+        <div>
+          <div class="lcd" id="r-l">&gt; FOR: independent researchers, founders, writers</div>
+          <dl id="r-s"><dt>Includes</dt><dd>Hot desks across the building</dd><dt>Social</dt><dd>Member events and dinners</dd><dt>Guests</dt><dd>Passes for collaborators</dd></dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <div class="sh"><span class="idx">02 · SPEC</span><div><h2>The building, by the numbers.</h2></div></div>
+    <div class="spec">
+      <div><span class="lab">Members</span><b>215</b></div>
+      <div><span class="lab">Resident teams</span><b>21</b></div>
+      <div><span class="lab">Fellowships</span><b>4</b></div>
+      <div><span class="lab">Floors</span><b>4</b></div>
+    </div>
+    <div class="duo">
+      <div class="monitor">
+        <div class="tube" id="tube">
+          <span class="ch" id="ch">CH1</span>
+          <img class="on" src="img/lounge.jpg" alt="Lounge with low orange sofas, a lamp and plants">
+          <img src="img/desks.jpg" alt="Standing desks with monitors by tall curtained windows">
+          <img src="img/screen.jpg" alt="The event room set up for a screening">
+          <img src="img/whiteboard.jpg" alt="Whiteboard asking what makes a problem important">
+        </div>
+        <div class="mrow"><span class="lab" id="cap">CH1 · The lounge</span><button class="knob" id="knob" aria-label="Next view of the space"></button></div>
+      </div>
+      <div class="term" aria-label="Members and what they are into">
+        <div><span class="p">mox@1680</span>:~$ <span class="k">who --random</span></div>
+        <div id="log"></div>
+        <div><span class="p">mox@1680</span>:~$ <span class="c"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="teams">
+  <div class="wrap">
+    <div class="sh"><span class="idx">03 · RESIDENTS</span><div><h2>Teams in the building.</h2><p>Labs, startups and nonprofits rent private offices upstairs. Partner orgs send people through the guest program.</p></div></div>
+    <div class="dir">
+      <div class="tbl" role="table" aria-label="Resident teams">
+        <div class="r"><span>Sentient Futures</span><span>RM 408–409</span></div>
+        <div class="r"><span>Tabula Bio</span><span>RM 411</span></div>
+        <div class="r"><span>hum.ai</span><span>RM 404</span></div>
+        <div class="r"><span>Netholabs</span><span>RM 203</span></div>
+        <div class="r"><span>Tampersec</span><span>RM 304</span></div>
+        <div class="r"><span>Talarion</span><span>RM 406</span></div>
+        <div class="r"><span>Stardrift</span><span>RM 412</span></div>
+      </div>
+      <div class="tbl" role="table" aria-label="Partner organizations">
+        <div class="r"><span>ARC · Redwood · Palisade</span><span>PARTNER</span></div>
+        <div class="r"><span>Epoch · AI Impacts · GovAI</span><span>PARTNER</span></div>
+        <div class="r"><span>Elicit · Timaeus · Seldon</span><span>PARTNER</span></div>
+        <div class="r"><span>Lightcone · Roots of Progress</span><span>PARTNER</span></div>
+        <div class="r"><span>ACX Grants</span><span>PARTNER</span></div>
+        <div class="r"><span>Pivotal · Frame · Iliad · GEF</span><span>FELLOWSHIP</span></div>
+        <div class="r"><span>Manifund</span><span>OPERATOR</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="final">
+      <div><div class="lab" style="color:#9EA1A4">04 · START</div><h2 style="margin-top:12px">Come work on what matters.</h2><p>Questions about fit? Write to robin@moxsf.com.</p></div>
+      <div class="ctas">
+        <a class="key orange" href="#"><span class="shadow"></span><span class="edge"></span><span class="face">Apply for membership</span></a>
+        <a class="key" href="#"><span class="shadow"></span><span class="edge"></span><span class="face">Inquire about offices</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+<footer class="wrap"><span>A project of Manifund · Donate</span><span>1680 Mission Street · San Francisco</span></footer>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Departure board
+  var ev=[["WED","4PM","MOX-GIVING"],["WED","5PM","AI-PHILOSOPHY WRITING"],["FRI","6PM","BAND SETUP + PRACTICE"],["SAT","7PM","LIVE BAND KARAOKE"],["MON","7PM","SF LEAN MEETUP"]];
+  var board=document.getElementById('board');
+  ev.forEach(function(e){var r=document.createElement('div');r.className='brow';r.innerHTML='<span>'+e[0]+'</span><span>'+e[1]+'</span><span class="n">'+e[2]+'</span>';board.appendChild(r)});
+  if(!reduce){var rows=board.querySelectorAll('.brow:not(.hd)'),fi=0;setInterval(function(){var r=rows[fi%rows.length];r.classList.remove('flip');void r.offsetWidth;r.classList.add('flip');fi++},2600)}
+
+  // Mode keys
+  var modes=[
+    {k:"Mode M-01 · most people start here",h:"Membership",d:"A desk, the kitchen, the library and the people. For independent researchers and builders working on things that matter.",b:"Apply for membership",l:"> FOR: independent researchers, founders, writers",s:[["Includes","Hot desks across the building"],["Social","Member events and dinners"],["Guests","Passes for collaborators"]]},
+    {k:"Mode O-02 · for teams",h:"Private office",d:"A lockable room for your org, inside a building full of people you will want to meet.",b:"Inquire about offices",l:"> FOR: labs, startups, nonprofits",s:[["Includes","A room sized for your team"],["Shared","Meeting rooms and phone booths"],["Plus","All member benefits"]]},
+    {k:"Mode D-03 · just visiting",h:"Day pass",d:"Spend a day here before you commit. Bring your laptop and say hello.",b:"Buy a day pass",l:"> FOR: anyone curious about Mox",s:[["When","Any weekday"],["Includes","Desk, Wi-Fi and coffee"],["Bonus","Lunch with members"]]},
+    {k:"Mode E-04 · for organizers",h:"Host an event",d:"Talks, hackathons, screenings, retreats. We have the room, the screen and the chairs.",b:"Plan an event",l:"> FOR: organizers and communities",s:[["Space","Main hall and breakout rooms"],["Kit","Projector and sound"],["Help","Event support from our team"]]}];
+  var keys=document.querySelectorAll('.keys .key');
+  keys.forEach(function(k){k.addEventListener('click',function(){
+    var m=modes[+k.dataset.m];
+    keys.forEach(function(o){o.setAttribute('aria-pressed',o===k);o.classList.toggle('dark',o===k)});
+    document.getElementById('r-k').textContent=m.k;document.getElementById('r-h').textContent=m.h;document.getElementById('r-d').textContent=m.d;
+    document.getElementById('r-b').textContent=m.b;document.getElementById('r-l').textContent=m.l;
+    document.getElementById('r-s').innerHTML=m.s.map(function(x){return '<dt>'+x[0]+'</dt><dd>'+x[1]+'</dd>'}).join('');
+  })});
+
+  // Monitor channels
+  var imgs=document.querySelectorAll('#tube img'),caps=["The lounge","The desks","The big room","The whiteboard"],ci=0,rot=0,knob=document.getElementById('knob');
+  function chan(){imgs[ci].classList.remove('on');ci=(ci+1)%imgs.length;imgs[ci].classList.add('on');document.getElementById('ch').textContent='CH'+(ci+1);document.getElementById('cap').textContent='CH'+(ci+1)+' · '+caps[ci];rot+=90;knob.style.transform='rotate('+rot+'deg)'}
+  knob.addEventListener('click',chan); if(!reduce) setInterval(chan,7000);
+
+  // Terminal
+  var ppl=[["lily_shi","LLM interpretability","dance"],["leona_mollica","decision theory foundations","calligraphy"],["jez_ng","the fastest Mach-O linker","growing mushrooms"],["kris_gulati","economics of AI","origami"],["timothy_zhou","jailbreak interpretability","chamber music"],["ran_sun","US/China AI safety coordination","rock climbing"],["william_jarrold","mech interp","jazz piano"],["avi_sundaresan","world-state compression","espresso"],["haoxing_du","real-world agent traces","paragliding"],["max_feldman","software verification","distance running"]];
+  var log=document.getElementById('log'),pi=0;
+  function add(){var p=ppl[pi%ppl.length];pi++;var d=document.createElement('div');d.className='line';d.innerHTML='<span class="k">'+p[0]+'</span> → '+p[1]+' <span style="color:#7E8083">+</span> '+p[2];log.appendChild(d);while(log.children.length>13)log.removeChild(log.firstChild)}
+  for(var i=0;i<12;i++)add(); if(!reduce) setInterval(add,3400);
+})();
+</script>
+</body>
+</html>

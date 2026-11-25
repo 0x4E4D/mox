@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mox · Direction A · The Building</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an architectural broadsheet. The building drawing anchors the hero; the elevator's floor indicator is the page's navigation. */
+:root{
+  --paper:#F9FAFA; --concrete:#E0E1E2; --ink:#1E1B18; --ink-2:#5B5550;
+  --rust:#7A3305; --rust-2:#5E2703; --signal:#EB5809; --green:#4C7D52;
+  --rule:#CFCFCC;
+  --display:"Libre Caslon Display","Libre Caslon Text",Georgia,serif;
+  --text:"Libre Caslon Text",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.08}
+h2{font-size:clamp(34px,4.4vw,54px)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+/* Header */
+header{border-bottom:1px solid var(--rule);background:var(--paper);position:sticky;top:0;z-index:20}
+.bar{display:flex;align-items:center;gap:28px;height:68px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.mark{width:44px;height:36px;background:var(--ink);-webkit-mask:url(img/mark.svg) no-repeat center/contain;mask:url(img/mark.svg) no-repeat center/contain}
+.word{font-family:var(--display);font-size:30px;line-height:1}
+nav.main{display:flex;gap:24px;margin-left:auto;font-family:var(--mono);font-size:13px;letter-spacing:.04em}
+nav.main a{text-decoration:none;color:var(--ink-2)}
+nav.main a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:13px 20px;border:1px solid var(--rust);border-radius:2px;transition:transform .12s ease, box-shadow .12s ease, background .2s}
+.btn.solid{background:var(--rust);color:#fff;box-shadow:0 3px 0 var(--rust-2)}
+.btn.solid:hover{background:#8A3B07}
+.btn.solid:active{transform:translateY(3px);box-shadow:0 0 0 var(--rust-2)}
+.btn.line{color:var(--rust);background:transparent}
+.btn.line:hover{background:#F1E9E3}
+.btn.sm{padding:9px 14px;font-size:12px}
+@media (max-width:860px){nav.main{display:none}.bar .btn{margin-left:auto}}
+
+/* Hero */
+.hero{padding-block:64px 40px;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(42px,6vw,80px);letter-spacing:-.01em}
+.hero h1 em{font-family:var(--text);font-style:italic;font-size:.86em;color:var(--rust)}
+.hero p.lede{font-size:20px;color:var(--ink-2);max-width:34em;margin:24px 0 32px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.addr{margin-top:28px;display:flex;gap:10px;align-items:center;font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.addr .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(76,125,82,.5);animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,125,82,.45)}70%{box-shadow:0 0 0 10px rgba(76,125,82,0)}100%{box-shadow:0 0 0 0 rgba(76,125,82,0)}}
+.drawing{position:relative;aspect-ratio:690/600;max-width:100%}
+.drawing .lines{position:absolute;inset:0;background:var(--ink);-webkit-mask:url(img/sketch.png) no-repeat center/contain;mask:url(img/sketch.png) no-repeat center/contain;opacity:.88}
+.win{position:absolute;background:#F6B26B;mix-blend-mode:multiply;opacity:0;border-radius:1px;animation:glow 14s ease-in-out infinite}
+@keyframes glow{0%,18%{opacity:0}30%,70%{opacity:.75}82%,100%{opacity:0}}
+.drawing figcaption{position:absolute;right:0;bottom:-6px;font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.08em}
+@media (max-width:860px){.hero{grid-template-columns:1fr;padding-block:36px 24px}.drawing{max-width:520px}}
+
+/* Ways in */
+section{padding-block:72px;border-top:1px solid var(--rule)}
+.sec-head{display:grid;grid-template-columns:200px 1fr;gap:32px;margin-bottom:40px;align-items:baseline}
+.sec-head .floor{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--ink-2);text-transform:uppercase}
+.sec-head .floor b{display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;margin-right:10px;font-weight:500;color:var(--ink)}
+.sec-head p{color:var(--ink-2);margin:14px 0 0;max-width:40em}
+@media (max-width:760px){.sec-head{grid-template-columns:1fr;gap:10px}}
+.ways{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink)}
+.way{padding:28px 24px 24px;display:flex;flex-direction:column;gap:14px;border-right:1px solid var(--ink);min-width:0;background:var(--paper);transition:background .2s}
+.way:last-child{border-right:0}
+.way:hover{background:#fff}
+.way .k{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--rust)}
+.way h3{font-size:28px}
+.way p{margin:0;color:var(--ink-2);font-size:15.5px;flex:1}
+.way ul{margin:0;padding:0;list-style:none;font-size:14.5px;border-top:1px solid var(--rule)}
+.way li{padding:8px 0;border-bottom:1px solid var(--rule)}
+.way .btn{align-self:flex-start;margin-top:6px}
+.way.primary{background:#fff}
+@media (max-width:980px){.ways{grid-template-columns:1fr 1fr}.way:nth-child(2){border-right:0}.way:nth-child(-n+2){border-bottom:1px solid var(--ink)}}
+@media (max-width:560px){.ways{grid-template-columns:1fr}.way{border-right:0;border-bottom:1px solid var(--ink)}.way:last-child{border-bottom:0}}
+
+/* Events */
+.events{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start}
+.ev{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.ev li{display:grid;grid-template-columns:72px 64px 1fr auto;gap:16px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--rule)}
+.ev .d{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.ev .t{font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.ev .n{font-size:22px;font-family:var(--display);line-height:1.2}
+.ev a.r{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--rust);text-decoration:none;white-space:nowrap}
+.ev a.r:hover{text-decoration:underline}
+.photo{margin:0;background:#fff;padding:10px 10px 12px;border:1px solid var(--rule);box-shadow:0 1px 0 var(--rule),0 18px 30px -22px rgba(30,27,24,.45)}
+.photo .ph{overflow:hidden;aspect-ratio:4/5}
+.photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.04) translate(0,0)}to{transform:scale(1.09) translate(-1.5%,-1%)}}
+.photo figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-2);margin-top:10px;display:flex;justify-content:space-between;letter-spacing:.06em}
+@media (max-width:900px){.events{grid-template-columns:1fr}.ev li{grid-template-columns:56px 52px 1fr}.ev a.r{grid-column:3}}
+
+/* People */
+.people{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.quote{font-family:var(--display);font-size:clamp(28px,3.4vw,42px);line-height:1.2;min-height:4.4em;margin:0}
+.quote .who{color:var(--ink)}
+.quote .what{font-family:var(--text);font-style:italic;color:var(--rust)}
+.quote span{transition:opacity .6s ease}
+.quote.fade span{opacity:0}
+.count{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap}
+.count div{border-top:1px solid var(--ink);padding-top:10px;min-width:120px}
+.count b{display:block;font-family:var(--display);font-weight:400;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.06em}
+.gather{font-size:20px;line-height:1.8;margin:0}
+.gather span{white-space:nowrap}
+.gather span:not(:last-child)::after{content:" / ";color:var(--rule)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.strip .photo .ph{aspect-ratio:4/3}
+@media (max-width:860px){.people{grid-template-columns:1fr;gap:32px}.strip{grid-template-columns:1fr 1fr}.strip figure:last-child{display:none}}
+
+/* Directory board */
+.board-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.board{background:#22201E;border:10px solid #3B3733;border-radius:4px;padding:22px 26px;color:#F2EFEA;font-family:var(--mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 22px);box-shadow:inset 0 0 0 1px #000,0 24px 40px -28px rgba(0,0,0,.6)}
+.board h4{margin:0 0 14px;font-weight:500;text-align:center;letter-spacing:.3em;color:#fff}
+.board .row{display:flex;justify-content:space-between;gap:16px;line-height:22px}
+.board .row span:last-child{color:#E7D7B8;font-variant-numeric:tabular-nums}
+.board .fl{color:#9A948C;margin-top:10px}
+.partners{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:28px;font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+@media (max-width:860px){.board-wrap{grid-template-columns:1fr}.board{font-size:12px;padding:18px}}
+
+/* CTA band */
+.close{background:var(--rust);color:#fff;border-top:0}
+.close .inner{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.close h2{color:#fff}
+.close p{color:#F1DCCB;margin:14px 0 0}
+.close .btn.solid{background:#fff;color:var(--rust);border-color:#fff;box-shadow:0 3px 0 #D9C3B3}
+.close .btn.line{color:#fff;border-color:#F1DCCB}
+.close .btn.line:hover{background:rgba(255,255,255,.08)}
+.close .ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+@media (max-width:760px){.close .inner{grid-template-columns:1fr}.close .ctas{justify-content:flex-start}}
+footer{padding-block:28px;font-family:var(--mono);font-size:12px;color:var(--ink-2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* Elevator indicator nav */
+.elevator{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:14px;padding:10px 16px;border-radius:6px;
+  background:linear-gradient(180deg,#EDEEEF 0%,#C9CBCD 48%,#DADCDD 52%,#BFC1C3 100%);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 #9FA2A5,0 10px 24px -12px rgba(0,0,0,.45);font-family:var(--mono)}
+.elevator a{font-size:20px;line-height:1;text-decoration:none;color:#45484B;font-weight:500;transition:color .35s,text-shadow .35s;min-width:14px;text-align:center}
+.elevator a.on{color:var(--signal);text-shadow:0 0 8px rgba(235,88,9,.75),0 0 2px rgba(235,88,9,.9)}
+.elevator .arr{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;opacity:.55}
+.elevator .up{border-bottom:11px solid #45484B}
+.elevator .dn{border-top:11px solid #45484B}
+.elevator .arr.on.up{border-bottom-color:var(--signal);opacity:1;filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
+.elevator .arr.on.dn{border-top-color:var(--signal);opacity:1;filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
+.elevator .lbl{font-size:10px;letter-spacing:.14em;color:#45484B;text-transform:uppercase;border-left:1px solid #A9ACAF;padding-left:12px;min-width:84px}
+@media (max-width:560px){.elevator .lbl{display:none}}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.win{opacity:.6}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#lobby" aria-label="Mox home"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>
+    <nav class="main" aria-label="Main">
+      <a href="#lobby">Membership</a><a href="#lobby">Offices</a><a href="#events">Events</a><a href="#people">People</a><a href="#directory">Directory</a><a href="#">Member login</a>
+    </nav>
+    <a class="btn solid sm" href="#lobby">Apply</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero" id="top">
+    <div>
+      <div class="eyebrow">Research incubator · Community space · San Francisco</div>
+      <h1 style="margin-top:18px">A home for doers of good <em>and</em> masters of craft.</h1>
+      <p class="lede">Mox is four floors on Mission Street where alignment researchers, founders, writers and musicians do their most careful work, and then have dinner together.</p>
+      <div class="ctas">
+        <a class="btn solid" href="#lobby">Apply for membership</a>
+        <a class="btn line" href="#lobby">Book a day pass</a>
+      </div>
+      <div class="addr"><span class="dot" aria-hidden="true"></span>Open today · 1680 Mission Street, San Francisco</div>
+    </div>
+    <figure class="drawing" style="margin:0" aria-label="Line drawing of the Mox building">
+      <div class="lines"></div>
+      <span class="win" style="left:57.2%;top:38.6%;width:5.9%;height:6%;animation-delay:0s"></span>
+      <span class="win" style="left:66%;top:48.2%;width:5.9%;height:6%;animation-delay:-5s"></span>
+      <span class="win" style="left:57.2%;top:58.2%;width:5.9%;height:6%;animation-delay:-9s"></span>
+      <span class="win" style="left:66%;top:38.6%;width:5.9%;height:6%;animation-delay:-11.5s"></span>
+      <figcaption>1680 MISSION ST.</figcaption>
+    </figure>
+  </div>
+
+  <section id="lobby" data-floor="1" data-name="Lobby">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="floor"><b>1</b>Lobby</div>
+        <div><h2>Four ways in.</h2><p>Pick the one that fits how you work. Every path starts with a short conversation with our team.</p></div>
+      </div>
+      <div class="ways">
+        <article class="way primary">
+          <span class="k">Most people start here</span>
+          <h3>Membership</h3>
+          <p>A desk, the kitchen, the library and the people. For independent researchers and builders working on things that matter.</p>
+          <ul><li>Hot desks across the building</li><li>Member events and dinners</li><li>Guest passes for collaborators</li></ul>
+          <a class="btn solid sm" href="#">Apply for membership</a>
+        </article>
+        <article class="way">
+          <span class="k">For teams</span>
+          <h3>Private office</h3>
+          <p>A lockable room for your org, inside a building full of people you will want to meet.</p>
+          <ul><li>Rooms sized for small teams</li><li>Meeting rooms and phone booths</li><li>All member benefits</li></ul>
+          <a class="btn line sm" href="#">Inquire about offices</a>
+        </article>
+        <article class="way">
+          <span class="k">Just visiting</span>
+          <h3>Day pass</h3>
+          <p>Spend a day here before you commit. Bring your laptop and say hello.</p>
+          <ul><li>Any weekday</li><li>Desk, Wi-Fi and coffee</li><li>Lunch with members</li></ul>
+          <a class="btn line sm" href="#">Buy a day pass</a>
+        </article>
+        <article class="way">
+          <span class="k">For organizers</span>
+          <h3>Host an event</h3>
+          <p>Talks, hackathons, screenings, retreats. We have the room, the screen and the chairs.</p>
+          <ul><li>Main hall and breakout rooms</li><li>Projector and sound</li><li>Event support from our team</li></ul>
+          <a class="btn line sm" href="#">Plan an event</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="events" data-floor="2" data-name="Events">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="floor"><b>2</b>This week</div>
+        <div><h2>Something is always on.</h2><p>Most events are open to the public. Members get first seats.</p></div>
+      </div>
+      <div class="events">
+        <ul class="ev">
+          <li><span class="d">Wed</span><span class="t">4 pm</span><span class="n">Mox-Giving</span><a class="r" href="#">RSVP →</a></li>
+          <li><span class="d">Wed</span><span class="t">5 pm</span><span class="n">AI-Philosophy Writing Group</span><a class="r" href="#">RSVP →</a></li>
+          <li><span class="d">Fri</span><span class="t">6 pm</span><span class="n">Band Setup + Practice</span><a class="r" href="#">Details →</a></li>
+          <li><span class="d">Sat</span><span class="t">7 pm</span><span class="n">Mox-tunies! Live Band Karaoke</span><a class="r" href="#">RSVP →</a></li>
+          <li><span class="d">Mon</span><span class="t">7 pm</span><span class="n">SF Lean Meetup</span><a class="r" href="#">RSVP →</a></li>
+          <li style="border-bottom:0"><span></span><span></span><a class="r" href="#" style="font-size:13px">All events and calendar →</a></li>
+        </ul>
+        <figure class="photo"><div class="ph"><img src="img/screen.jpg" alt="The event room set up for a screening, with a large screen, speakers and floor cushions"></div><figcaption><span>THE BIG ROOM</span><span>FILM NIGHT</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="people" data-floor="3" data-name="People">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="floor"><b>3</b>People</div>
+        <div><h2>Who you'll meet in the kitchen.</h2></div>
+      </div>
+      <div class="people">
+        <div>
+          <p class="quote" id="quote" aria-live="polite"><span class="who">Lily Shi</span> <span>is into</span> <span class="what">LLM interpretability</span> <span>and</span> <span class="what">dance</span>.</p>
+          <div class="count">
+            <div><b>215</b><span>MEMBERS</span></div>
+            <div><b>21</b><span>RESIDENT TEAMS</span></div>
+            <div><b>4</b><span>FELLOWSHIPS IN RESIDENCE</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px">Who we gather</div>
+          <p class="gather"><span>Alignment researchers</span> <span>Startup founders</span> <span>Effective altruists</span> <span>Writers</span> <span>Filmmakers</span> <span>Musicians</span> <span>Community builders</span> <span>Hackers</span> <span>Designers</span> <span>Gamers</span></p>
+          <a class="btn line sm" href="#" style="margin-top:22px">Meet the people</a>
+        </div>
+      </div>
+      <div class="strip">
+        <figure class="photo" style="margin:0"><div class="ph"><img src="img/lounge.jpg" alt="Lounge with low orange sofas, a lamp and plants"></div><figcaption><span>THE LOUNGE</span><span>QUIET CORNER</span></figcaption></figure>
+        <figure class="photo" style="margin:0"><div class="ph"><img src="img/whiteboard.jpg" alt="Whiteboard asking what makes a problem important" style="animation-delay:-8s"></div><figcaption><span>WHITEBOARD</span><span>"WHAT MAKES A PROBLEM IMPORTANT?"</span></figcaption></figure>
+        <figure class="photo" style="margin:0"><div class="ph"><img src="img/desks.jpg" alt="Standing desks with monitors by tall curtained windows" style="animation-delay:-15s"></div><figcaption><span>THE DESKS</span><span>BY THE WINDOWS</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="directory" data-floor="4" data-name="Directory">
+    <div class="wrap board-wrap">
+      <div>
+        <div class="sec-head" style="grid-template-columns:1fr;margin-bottom:20px">
+          <div class="floor"><b>4</b>Directory</div>
+          <div><h2>Teams that call Mox home.</h2><p>Research labs, startups and nonprofits work out of private offices upstairs. Partner organizations send their people through our guest program.</p></div>
+        </div>
+        <a class="btn line sm" href="#">Inquire about offices</a>
+        <div class="partners" aria-label="Partner organizations"><span>ACX Grants</span><span>Elicit</span><span>AI Impacts</span><span>Roots of Progress</span><span>Epoch</span><span>Lightcone</span><span>GovAI</span><span>ARC</span><span>Redwood</span><span>Palisade</span><span>Timaeus</span><span>Seldon</span></div>
+      </div>
+      <div class="board" role="table" aria-label="Building directory">
+        <h4>1680 · DIRECTORY</h4>
+        <div class="row fl"><span>— Floor 2 —</span><span></span></div>
+        <div class="row"><span>Gutenberg</span><span>201</span></div>
+        <div class="row"><span>Netholabs</span><span>203</span></div>
+        <div class="row"><span>The Relationship Co.</span><span>204</span></div>
+        <div class="row"><span>Neolithic</span><span>205</span></div>
+        <div class="row fl"><span>— Floor 3 —</span><span></span></div>
+        <div class="row"><span>Haptica · Deep AI</span><span>302</span></div>
+        <div class="row"><span>Tampersec</span><span>304</span></div>
+        <div class="row"><span>Confluence</span><span>306</span></div>
+        <div class="row fl"><span>— Floor 4 —</span><span></span></div>
+        <div class="row"><span>Chips for Humanity</span><span>403</span></div>
+        <div class="row"><span>hum.ai</span><span>404</span></div>
+        <div class="row"><span>Talarion</span><span>406</span></div>
+        <div class="row"><span>Sentient Futures</span><span>408–409</span></div>
+        <div class="row"><span>Tabula Bio</span><span>411</span></div>
+        <div class="row"><span>Stardrift</span><span>412</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap inner">
+      <div><h2>Come work on what matters.</h2><p>Questions about fit? Write to robin@moxsf.com.</p></div>
+      <div class="ctas"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Book a day pass</a></div>
+    </div>
+  </section>
+</main>
+<footer class="wrap"><span>A project of Manifund · Donate</span><span>1680 Mission Street, San Francisco</span></footer>
+
+<nav class="elevator" aria-label="Floors">
+  <span class="arr up" id="up"></span>
+  <a href="#lobby" data-f="1">1</a><a href="#events" data-f="2">2</a><a href="#people" data-f="3">3</a><a href="#directory" data-f="4">4</a>
+  <span class="arr dn" id="dn"></span>
+  <span class="lbl" id="flbl">Street</span>
+</nav>
+
+<script>
+(function(){
+  // Elevator: light the floor whose section is in view; arrow shows travel direction.
+  var links=[].slice.call(document.querySelectorAll('.elevator a')), lbl=document.getElementById('flbl'),
+      up=document.getElementById('up'), dn=document.getElementById('dn'), cur=0, lastY=window.scrollY, t;
+  var secs=[].slice.call(document.querySelectorAll('section[data-floor]'));
+  function update(){
+    var y=window.scrollY, mid=y+innerHeight*0.45, f=0, name='Street';
+    secs.forEach(function(s){ if(s.offsetTop<=mid){ f=+s.dataset.floor; name=s.dataset.name; } });
+    if(f!==cur){ cur=f; links.forEach(function(a){a.classList.toggle('on',+a.dataset.f===f)}); lbl.textContent=name; }
+    var goingUp=y<lastY; up.classList.toggle('on',goingUp); dn.classList.toggle('on',!goingUp&&y!==lastY);
+    clearTimeout(t); t=setTimeout(function(){up.classList.remove('on');dn.classList.remove('on')},700); lastY=y;
+  }
+  addEventListener('scroll',update,{passive:true}); update();
+
+  // People: a gentle rotation through real member interests.
+  var people=[["Lily Shi","LLM interpretability","dance"],["Leona Mollica","decision theory foundations","calligraphy"],["Timothy Zhou","LLM jailbreak interpretability","composing chamber music"],["Kris Gulati","the economics of AI","origami"],["Jez Ng","building the fastest Mach-O linker","growing mushrooms"],["Ran Sun","US/China AI safety coordination","rock climbing"],["William Jarrold","mechanistic interpretability","jazz piano"],["Avi Sundaresan","world-state compression","espresso"]];
+  var q=document.getElementById('quote'), i=0;
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(function(){
+    q.classList.add('fade');
+    setTimeout(function(){ i=(i+1)%people.length; var p=people[i]; var s=q.querySelectorAll('span'); s[0].textContent=p[0]; s[2].textContent=p[1]; s[4].textContent=p[2]; q.classList.remove('fade'); },650);
+  },4800);
+})();
+</script>
+</body>
+</html>

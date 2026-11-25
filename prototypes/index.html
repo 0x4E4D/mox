@@ -1,0 +1,113 @@
+<title>Mox Redesign Directions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a simple review sheet. Three equal columns, one per direction, then the shared fixes. */
+:root{
+  --paper:#F9FAFA; --card:#FFFFFF; --ink:#1E1B18; --ink-2:#5B5A57; --rule:#DCDDDE;
+  --rust:#7A3305; --signal:#EB5809; --green:#4C7D52;
+  --serif:"Libre Caslon Text",Georgia,serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.6}
+.page{max-width:1240px;margin:0 auto;padding-block:48px 64px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.eye{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.4vw,52px);line-height:1.08;margin:12px 0 14px;text-wrap:balance}
+.lede{max-width:46em;color:var(--ink-2);font-size:17px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.shot{display:block;border-bottom:1px solid var(--rule);overflow:hidden;aspect-ratio:960/615;background:#eee}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .5s ease}
+.card:hover .shot img{transform:scale(1.02)}
+.body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--rust)}
+h2{font-family:var(--serif);font-weight:400;font-size:28px;margin:0;line-height:1.1}
+.body p{margin:0;color:var(--ink-2)}
+dl{margin:0;display:grid;grid-template-columns:92px 1fr;gap:8px 12px;font-size:14px;border-top:1px solid var(--rule);padding-top:12px}
+dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);padding-top:2px}
+dd{margin:0}
+.open{margin-top:auto;align-self:flex-start;display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#fff;background:var(--ink);padding:11px 16px;border-radius:4px;box-shadow:0 3px 0 #000;transition:transform .12s, box-shadow .12s}
+.open:hover{background:#000}
+.open:active{transform:translateY(3px);box-shadow:none}
+.open:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+@media (max-width:980px){.grid{grid-template-columns:1fr;max-width:620px}}
+.shared{margin-top:56px;display:grid;grid-template-columns:260px 1fr;gap:32px;border-top:1px solid var(--ink);padding-top:22px}
+.shared h3{font-family:var(--serif);font-weight:400;font-size:26px;margin:0;line-height:1.15}
+.shared ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px 32px}
+.shared li{padding-left:18px;position:relative;color:var(--ink-2)}
+.shared li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--signal);border-radius:1px}
+.shared li b{color:var(--ink);font-weight:500}
+@media (max-width:820px){.shared{grid-template-columns:1fr}.shared ul{grid-template-columns:1fr}}
+.note{margin-top:28px;font-size:14px;color:var(--ink-2);max-width:60em;border-left:2px solid var(--rule);padding-left:14px}
+</style>
+
+<div class="page">
+  <div class="eye">Mox website · three directions · Nov 2026</div>
+  <h1>Three ways to make moxsf.com feel alive.</h1>
+  <p class="lede">Each direction is a working homepage built from the mood board palette, real Mox photos and the current site's content. They share the same structure and fixes. They differ in personality. Open each one, scroll it, press things.</p>
+
+  <div class="grid">
+    <article class="card">
+      <a class="shot" href="a.html" aria-label="Open direction A"><img src="img/thumb-a.jpg" alt="Direction A homepage: serif headline beside the line drawing of the Mox building"></a>
+      <div class="body">
+        <span class="tag">A · EDITORIAL</span>
+        <h2>The Building</h2>
+        <p>The closest to today's Mox, cleaned up. The building drawing becomes the hero, and the page is organized like the building itself: lobby, events, people, directory.</p>
+        <dl>
+          <dt>Feels like</dt><dd>A well-made magazine about a place</dd>
+          <dt>Tactile</dt><dd>An elevator floor indicator (1 2 3 4) that lights up as you scroll, a lobby directory board with real room numbers</dd>
+          <dt>Resting motion</dt><dd>Windows in the drawing slowly light up; photos drift very slightly</dd>
+          <dt>Risk</dt><dd>The safest choice; least surprising to Mox</dd>
+        </dl>
+        <a class="open" href="a.html">Open A →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="b.html" aria-label="Open direction B"><img src="img/thumb-b.jpg" alt="Direction B homepage: serif headline beside a device with an amber departure board of events"></a>
+      <div class="body">
+        <span class="tag">B · TECHNICAL</span>
+        <h2>Control Panel</h2>
+        <p>Mox as a well-made instrument. Concrete grey on a drafting grid, events on a transit-style departure board, and four physical keys that switch between ways to join.</p>
+        <dl>
+          <dt>Feels like</dt><dd>A spec sheet for a research lab, with a serif voice</dd>
+          <dt>Tactile</dt><dd>Pushable keys, a channel knob on a monitor of the space, a screen within a screen</dd>
+          <dt>Resting motion</dt><dd>Board rows flicker, a ticker scrolls, a terminal prints who's in the building</dd>
+          <dt>Risk</dt><dd>The most distinctive; could read as cold if pushed further</dd>
+        </dl>
+        <a class="open" href="b.html">Open B →</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="c.html" aria-label="Open direction C"><img src="img/thumb-c.jpg" alt="Direction C homepage: green hero with serif headline and a taped photo of the gold Mox doors"></a>
+      <div class="body">
+        <span class="tag">C · HUMAN</span>
+        <h2>The Commons</h2>
+        <p>People first. The storefront green carries the page, the hero says who is at Mox right now, and joining is a clear three-step path from a visit to an office.</p>
+        <dl>
+          <dt>Feels like</dt><dd>Being shown around by someone who works there</dd>
+          <dt>Tactile</dt><dd>Photos as taped prints that straighten when you touch them, buttons with a pressable lip</dd>
+          <dt>Resting motion</dt><dd>The "At Mox now" line cycles through real members; the door photo sways gently</dd>
+          <dt>Risk</dt><dd>Warmest and best for sign-ups; slightly less "serious lab"</dd>
+        </dl>
+        <a class="open" href="c.html">Open C →</a>
+      </div>
+    </article>
+  </div>
+
+  <div class="shared">
+    <h3>What all three fix</h3>
+    <ul>
+      <li><b>One accent color.</b> No more multi-colored bubbles or links. Links and buttons share one treatment.</li>
+      <li><b>Clear ways in.</b> Membership, offices, day pass and events each get a named card and a single action, with membership as the obvious first choice.</li>
+      <li><b>Consistent boxes.</b> Same widths, edges and padding in every row, so nothing feels off-grid.</li>
+      <li><b>Serif and editorial,</b> with a mono or sans voice for labels and data.</li>
+      <li><b>People up front.</b> The member list's "is into" lines are the most charming thing Mox has; each direction surfaces them.</li>
+      <li><b>Quiet motion only.</b> Everything is readable at rest, slow loops only, and all motion turns off for people who ask their device for reduced motion.</li>
+    </ul>
+  </div>
+
+  <p class="note">These are direction prototypes, not finished pages. Events, members, staff and room numbers come from moxsf.com today. Some perk lines (for example "lunch with members" or "guest passes") are placeholder copy to show structure, and links don't go anywhere yet. Pick one, or mix parts, and I'll build it out.</p>
+</div>
