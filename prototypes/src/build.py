@@ -684,11 +684,19 @@ def f_build():
 # G2 · D2 with the building drawn up as a parts diagram: who we gather, labeled on the building
 # =====================================================================
 # (label, target x %, target y % on sketch.png, side)
+# (label, target x %, target y % on sketch.png, side, desktop label x %, label y nudge %, phone label x %)
+# Label columns are deliberately uneven, like the mechanical-pencil exploded view.
 DIAGRAM = [
-    ('Startup founders', 21, 13, 'l'), ('Alignment researchers', 27, 24, 'l'), ('Effective altruists', 32, 34, 'l'),
-    ('Writers', 38, 44, 'l'), ('Filmmakers', 44, 53, 'l'),
-    ('Community builders', 62, 26, 'r'), ('Designers', 70, 40, 'r'), ('Hackers', 64, 50, 'r'),
-    ('Musicians', 70, 59, 'r'), ('Gamers', 65, 70, 'r'),
+    ('Startup founders',      21, 13, 'l', -10, -4,  -2),
+    ('Alignment researchers', 27, 24, 'l', -27, -2,  -5),
+    ('Effective altruists',   32, 34, 'l',  -7,  1,  -1),
+    ('Writers',               38, 44, 'l', -22,  3,  -6),
+    ('Filmmakers',            44, 53, 'l',  -5,  6,  -2),
+    ('Community builders',    62, 26, 'r', 109, -7, 102),
+    ('Designers',             70, 40, 'r', 124, -2, 106),
+    ('Hackers',               64, 50, 'r', 106,  2, 101),
+    ('Musicians',             70, 59, 'r', 119,  4, 105),
+    ('Gamers',                65, 70, 'r', 108,  6, 102),
 ]
 G_CSS = """
 /* Parts-diagram labels on the building. Lines: 1.2px hairlines; text: mono in a paper-colored chip so lines tuck under it. */
@@ -697,7 +705,7 @@ G_CSS = """
 .dg path{fill:none;stroke:#C3C8CE;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .dg circle{fill:#8C96A0}
 .dg path.halo{stroke:var(--paper);stroke-width:6;opacity:.92}
-.dl{position:absolute;transform:translateY(-50%);font-family:var(--mono);font-size:13px;letter-spacing:-.01em;line-height:1.25;color:#586874;background:var(--paper);border-radius:5px;padding:2px 7px;white-space:nowrap}
+.dl{position:absolute;transform:translateY(-50%);font-family:var(--mono);font-size:12.5px;letter-spacing:-.01em;line-height:1.25;background:var(--paper);border-radius:5px;padding:2px 7px;white-space:nowrap}
 .dl.l{right:calc(100% - var(--x));text-align:right}
 .dl.r{left:var(--x)}
 .dcap{position:absolute;right:calc(100% - var(--x));transform:translateY(-50%);padding:0 7px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8C96A0;white-space:nowrap}
@@ -710,46 +718,129 @@ G_CSS = """
 .js .dg.on .dl{opacity:1;transform:translateY(-50%)}
 .js .dg.on .dcap{opacity:1}
 .dg-m{display:none}
-@media (max-width:700px){.dg-d{display:none}.dg-m{display:block}.dl{font-size:10px;padding:1px 4px;white-space:normal;max-width:92px}.dcap{font-size:9.5px;padding:0 4px}.dg path{stroke-width:3.6}.dg path.halo{stroke-width:10}.dg circle{r:6px}}
+@media (max-width:700px){.dg-d{display:none}.dg-m{display:block}.dl{font-size:10px;padding:1px 4px;white-space:normal;max-width:80px}.dcap{font-size:9.5px;padding:0 4px}.dg path{stroke-width:3.6}.dg path.halo{stroke-width:10}.dg circle{r:6px}}
 @media (prefers-reduced-motion:reduce){.js .dg path{stroke-dashoffset:0;transition:none}.js .dl,.js .dcap,.js .dg circle{opacity:1;transition:none}}
 """
 
-def g_diagram(cls, LX, RX, spread):
+def g_diagram(cls, phone):
     """One diagram layer. Coordinates are in the drawing's own 690x600 pixel space so lines never distort."""
     W_, H_ = 690, 600
     paths, chips, dots = [], [], []
-    lefts = [d for d in DIAGRAM if d[3] == 'l']; rights = [d for d in DIAGRAM if d[3] == 'r']
-    for col in (lefts, rights):
-        for n, (name, tx, ty, side) in enumerate(col):
-            k = DIAGRAM.index((name, tx, ty, side))
-            ly = (spread[0] + (spread[1] - spread[0]) * n / (len(col) - 1)) if spread else (ty - 3 if side == 'l' else ty + 3)
+    for side in ('l', 'r'):
+        col = [d for d in DIAGRAM if d[3] == side]
+        for n, (name, tx, ty, sd, lxd, dy, lxm) in enumerate(col):
+            k = DIAGRAM.index(col[n])
+            LX = lxm if phone else lxd
+            ly = (-4 + 96 * n / (len(col) - 1)) if phone else ty + dy
             X, Y, LYp = tx * W_ / 100, ty * H_ / 100, ly * H_ / 100
-            if side == 'l':
-                x0 = LX * W_ / 100 + 6; xm = X - 46
-                p = f'M{x0:.1f},{LYp:.1f} L{xm:.1f},{LYp:.1f} C{xm + 24:.1f},{LYp:.1f} {X - 26:.1f},{Y:.1f} {X - 4:.1f},{Y:.1f}'
-            else:
-                x0 = RX * W_ / 100 - 6; xm = X + 46
-                p = f'M{x0:.1f},{LYp:.1f} L{xm:.1f},{LYp:.1f} C{xm - 24:.1f},{LYp:.1f} {X + 26:.1f},{Y:.1f} {X + 4:.1f},{Y:.1f}'
+            sgn = -1 if side == 'l' else 1
+            x0 = LX * W_ / 100 - 6 * sgn
+            xm = X + 46 * sgn
+            p = f'M{x0:.1f},{LYp:.1f} L{xm:.1f},{LYp:.1f} C{xm - 24 * sgn:.1f},{LYp:.1f} {X + 26 * sgn:.1f},{Y:.1f} {X + 4 * sgn:.1f},{Y:.1f}'
             paths.append(f'<path class="halo" pathLength="1" d="{p}" style="transition-delay:{k * .09:.2f}s"/><path pathLength="1" d="{p}" style="transition-delay:{k * .09:.2f}s"/>')
             dots.append(f'<circle cx="{X:.1f}" cy="{Y:.1f}" r="3.2" style="transition-delay:{.75 + k * .09:.2f}s"/>')
-            x = LX if side == 'l' else RX
-            chips.append(f'<span class="dl {side}" style="--x:{x}%;top:{ly:.1f}%;transition-delay:{.4 + k * .09:.2f}s">{name}</span>')
-    capy = (spread[0] if spread else lefts[0][2] - 3) - 9
-    cap = (f'<span class="dcap" style="left:50%;right:auto;transform:translate(-50%,-50%);top:-14%">Who we gather</span>' if spread
-           else f'<span class="dcap" style="--x:{LX}%;top:{capy:.1f}%">Who we gather</span>')
+            chips.append(f'<span class="dl {side}" style="--x:{LX}%;top:{ly:.1f}%;transition-delay:{.4 + k * .09:.2f}s">{name}</span>')
+    first = DIAGRAM[0]
+    cap = (f'<span class="dcap" style="left:50%;right:auto;transform:translate(-50%,-50%);top:-14%">Who we gather</span>' if phone
+           else f'<span class="dcap" style="--x:{first[4] - 6}%;top:{first[2] + first[5] - 9}%">Who we gather</span>')
     return f'<div class="dg {cls}"><svg viewBox="0 0 {W_} {H_}" preserveAspectRatio="none" aria-hidden="true">{"".join(paths)}{"".join(dots)}</svg>{cap}{"".join(chips)}</div>'
+
+G_FONTS = 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;700&family=Fira+Sans:wght@400;600;700&display=swap'
+
+def g_theme_css():
+    light_extra = ""
+    dark = """--paper:#111827;--card:#1A2333;--concrete:#273142;--ink:#EEF0F3;--ink-2:#A3ABB8;--rule:#2C3646;
+  --rust:#F0A24A;--rust-2:#9A5A12;--signal:#F0A24A;--green:#6FBF7B;--btn:#E8983C;--btn-ink:#16120C;--btn-lip:#8F520F;
+  --dl-ink:#9DA9B6;--dl-line:#46505E;--dl-dot:#8995A3;color-scheme:dark;"""
+    rules = """
+  .bg .lines{opacity:.5}
+  .btn.solid{background:var(--btn);color:var(--btn-ink);box-shadow:0 3px 0 var(--btn-lip)}
+  .btn.solid:hover{background:#F2A754}
+  .btn.line{background:transparent;color:var(--rust);border-color:var(--rust)}
+  .btn.line:hover{background:rgba(240,162,74,.1)}
+  .card{box-shadow:0 1px 0 var(--rule),0 24px 40px -30px rgba(0,0,0,.9)}
+  .ev .d{border-color:var(--ink-2)}
+  .lg img{filter:grayscale(1) invert(1) brightness(1.05);mix-blend-mode:screen;opacity:.62}
+  .lg.white img{filter:brightness(0) invert(1);mix-blend-mode:normal;opacity:.62}
+  .lg:hover img{filter:invert(1) hue-rotate(180deg);mix-blend-mode:screen;opacity:1}
+  .lg.white:hover img{filter:brightness(0) invert(1);opacity:.95}
+  .elevator{background:linear-gradient(180deg,#3A4150 0%,#252B36 48%,#2E3542 52%,#20252E 100%);box-shadow:inset 0 1px 0 #4C5566,inset 0 -1px 0 #12161C,0 10px 24px -12px rgba(0,0,0,.8)}
+  .elevator a,.elevator .lbl{color:#A3ABB8}.elevator .lbl{border-left-color:#4C5566}
+  .arr svg{fill:#A3ABB8}.arr:hover svg{fill:#EEF0F3}
+  .xback{background:#EEF0F3!important;color:#111827!important;box-shadow:0 2px 0 #8A93A0,0 8px 20px -8px rgba(0,0,0,.6)!important}
+  .sc img,.m img{filter:none}
+  .board{border-color:#2C3646}
+  .ev li{border-bottom-color:var(--rule)}
+"""
+    return f"""
+:root{{--dl-ink:#586874;--dl-line:#C3C8CE;--dl-dot:#8C96A0}}
+:root[data-theme="dark"]{{{dark}}}
+@media (prefers-color-scheme:dark){{:root:not([data-theme="light"]){{{dark}}}}}
+""" + ''.join(f':root[data-theme="dark"] {r.strip()}\n' for r in rules.strip().split('\n')) + \
+          '@media (prefers-color-scheme:dark){' + ''.join(f':root:not([data-theme="light"]) {r.strip()}' for r in rules.strip().split('\n')) + '}\n'
+
+G_FONT_CSS = """
+/* moxsf.com's own type: Lora for text, Playfair Display for headings, Fira Sans for buttons and dates, plain mono for labels */
+:root{--display:"Playfair Display",Georgia,serif;--text:"Lora",Georgia,serif;--ui:"Fira Sans",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace}
+h1,h2,h3{font-weight:700}
+.card h3{font-size:24px}
+.counts b{font-weight:700}
+.tag{font-size:clamp(19px,2vw,21px)}
+.tag em{font-style:italic;font-weight:700}
+.addr{font-family:var(--text);font-size:17px}
+.top{font-family:var(--ui);font-size:14px;letter-spacing:0}
+.btn{font-family:var(--ui);font-weight:600;font-size:14px;letter-spacing:.01em;text-transform:none}
+.ev .d{font-family:var(--ui);font-weight:600;font-size:11px;letter-spacing:.02em}
+.ev .d b{font-weight:700}
+/* the real logo file, as a mask so it follows the theme */
+.lockup .logo{display:block;width:min(360px,74vw);aspect-ratio:5/2;background:var(--ink);-webkit-mask:url(img/mox_logo_text.svg) no-repeat center/contain;mask:url(img/mox_logo_text.svg) no-repeat center/contain;margin-block:-14px -6px}
+/* two cards now that the diagram says who we gather */
+.three{grid-template-columns:repeat(2,1fr);max-width:820px;margin-inline:auto}
+@media (max-width:760px){.three{grid-template-columns:1fr;max-width:460px}}
+.dl{color:var(--dl-ink)}
+.dg path{stroke:var(--dl-line)}
+.dg circle{fill:var(--dl-dot)}
+/* theme switch */
+.theme{all:unset;cursor:pointer;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;color:var(--ink-2);transition:color .2s,background .2s}
+.theme:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.theme:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.theme svg{width:18px;height:18px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}:root[data-theme="dark"] .theme .moon{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme .sun{display:none}:root:not([data-theme="light"]) .theme .moon{display:block}}
+"""
 
 def g_build():
     h = d_build().replace('Mox · D2 · The Building, in full', 'Mox · G2 · The building as a diagram')
-    h = h.replace('</style>', G_CSS + '</style>', 1)
-    dg = g_diagram('dg-d', -14, 114, None) + g_diagram('dg-m', -6, 106, (-4, 92))
+    h = h.replace(h[h.index('https://fonts.googleapis.com/css2?family=Libre'):h.index('"', h.index('https://fonts.googleapis.com/css2?family=Libre'))], G_FONTS, 1)
+    h = h.replace('</style>', G_CSS + G_FONT_CSS + g_theme_css() + '</style>', 1)
+    # theme before first paint
+    h = h.replace('<head>', '<head><script>try{var t=localStorage.getItem("mox-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>', 1)
+    # real logo
+    h = h.replace('<a class="lockup" href="#" aria-label="Mox"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>',
+                  '<a class="lockup" href="#" aria-label="Mox"><span class="logo" aria-hidden="true"></span></a>', 1)
+    # theme switch in the top strip, before Login
+    sw = ('<button class="theme" id="theme" type="button" aria-label="Switch between light and dark">'
+          '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>'
+          '<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button>')
+    h = h.replace('<a class="btn solid" href="#" style="padding:8px 14px">Login</a>', sw + '<a class="btn solid" href="#" style="padding:8px 14px">Login</a>', 1)
+    # drop the Who we gather card: the diagram on the building says it now
+    import re as _re
+    h, n = _re.subn(r'<article class="card rv">(?:(?!</article>).)*?<h3>Who we gather</h3>.*?</article>\s*', '', h, count=1, flags=_re.S)
+    assert n == 1
+    dg = g_diagram('dg-d', False) + g_diagram('dg-m', True)
     h = h.replace('<div class="bg" aria-hidden="true">', '<div class="bg">', 1)
     h = h.replace('    <div class="lines"></div>', '    <div class="lines" aria-hidden="true"></div>\n    ' + dg, 1)
     h = h.replace("var w=Math.min(innerWidth*0.96,1100,room*690/600);",
-                  "var ph=innerWidth<700;var w=Math.min(innerWidth*(ph?0.56:0.96),1100,room*690/600,ph?1e9:(innerWidth-40)/1.75);", 1)
+                  "var ph=innerWidth<700;var w=Math.min(innerWidth*(ph?0.56:0.96),1100,room*690/600,ph?1e9:(innerWidth-40)/2.45);", 1)
     h = h.replace("root.style.setProperty('--bo',(1-.76*p).toFixed(3));",
                   "root.style.setProperty('--bo',(1-.76*p).toFixed(3));root.style.setProperty('--lbo',Math.max(0,1-p*2.2).toFixed(3));", 1)
     h = h.replace("layout();onScroll();", "layout();onScroll();setTimeout(function(){[].forEach.call(document.querySelectorAll('.dg'),function(d){d.classList.add('on')})},reduce?0:650);", 1)
+    h = h.replace('</body>', """<script>(function(){var b=document.getElementById('theme'),r=document.documentElement;
+  function isDark(){return r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
+  b.onclick=function(){var t=isDark()?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('mox-theme',t)}catch(e){}};
+})();</script>
+</body>""", 1)
     return h
 
 for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build), ('f2', f_build), ('g2', g_build)):
