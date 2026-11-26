@@ -745,7 +745,7 @@ def g_diagram(cls, phone):
            else f'<span class="dcap" style="--x:{first[4] - 6}%;top:{first[2] + first[5] - 9}%">Who we gather</span>')
     return f'<div class="dg {cls}"><svg viewBox="0 0 {W_} {H_}" preserveAspectRatio="none" aria-hidden="true">{"".join(paths)}{"".join(dots)}</svg>{cap}{"".join(chips)}</div>'
 
-G_FONTS = 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;700&family=Fira+Sans:wght@400;600;700&display=swap'
+G_FONTS = 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:wght@400;700&family=Fira+Sans:wght@400;600;700&family=Doto:wght@700;900&display=swap'
 
 def g_theme_css():
     light_extra = ""
@@ -765,10 +765,12 @@ def g_theme_css():
   .lg:hover img{filter:invert(1) hue-rotate(180deg);mix-blend-mode:screen;opacity:1}
   .lg.white:hover img{filter:brightness(0) invert(1);opacity:.95}
   .elevator{background:linear-gradient(180deg,#3A4150 0%,#252B36 48%,#2E3542 52%,#20252E 100%);box-shadow:inset 0 1px 0 #4C5566,inset 0 -1px 0 #12161C,0 10px 24px -12px rgba(0,0,0,.8)}
-  .elevator a,.elevator .lbl{color:#A3ABB8}.elevator .lbl{border-left-color:#4C5566}
-  .arr svg{fill:#A3ABB8}.arr:hover svg{fill:#EEF0F3}
+  .elevator a{color:#A3ABB8}
+  .elevator .lbl{color:#A3ABB8;border-left-color:#4C5566}
+  .arr svg{fill:#A3ABB8}
+  .arr:hover svg{fill:#EEF0F3}
   .xback{background:#EEF0F3!important;color:#111827!important;box-shadow:0 2px 0 #8A93A0,0 8px 20px -8px rgba(0,0,0,.6)!important}
-  .sc img,.m img{filter:none}
+  .sc img{filter:none}
   .board{border-color:#2C3646}
   .ev li{border-bottom-color:var(--rule)}
 """
@@ -810,6 +812,82 @@ h1,h2,h3{font-weight:700}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme .sun{display:none}:root:not([data-theme="light"]) .theme .moon{display:block}}
 """
 
+G_FRAME_CSS = """
+/* Frames: cut corners and hairlines instead of boxes and drop shadows. A frame is a line layer (::before) under a fill layer (::after),
+   both clipped to the same chamfered outline, so the line is exactly one pixel all the way round, corners included. */
+:root{--fr-line:color-mix(in srgb,var(--ink) 16%,var(--paper));--fr-line-2:color-mix(in srgb,var(--ink) 10%,var(--paper));--fr-fill:color-mix(in srgb,var(--paper) 86%,transparent);--fr-scan:color-mix(in srgb,var(--ink) 5%,transparent)}
+.ch{--c:16px;position:relative;isolation:isolate;background:none;border:0;box-shadow:none}
+.ch::before,.ch::after,.ch-in,.ch-in::before,.ch-in::after{--k:var(--c);clip-path:polygon(var(--k) 0,calc(100% - var(--k)) 0,100% var(--k),100% calc(100% - var(--k)),calc(100% - var(--k)) 100%,var(--k) 100%,0 calc(100% - var(--k)),0 var(--k))}
+.ch::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--fr-line)}
+.ch::after{content:"";position:absolute;inset:1px;z-index:-2;--k:calc(var(--c) - .41px);background:var(--fr-fill)}
+/* double frame: the band between the two lines carries faint scanlines, like a bezel */
+.ch.dbl::after{background:repeating-linear-gradient(0deg,var(--fr-scan) 0 1px,transparent 1px 3px),var(--fr-fill)}
+.ch-in{position:absolute;inset:7px;z-index:-1;--k:calc(var(--c) - 2.9px)}
+.ch-in::before{content:"";position:absolute;inset:0;background:var(--fr-line-2);--k:calc(var(--c) - 2.9px)}
+.ch-in::after{content:"";position:absolute;inset:1px;background:var(--paper);--k:calc(var(--c) - 3.31px)}
+.card.ch{box-shadow:none;border:0;background:none}
+.card.ch .ph{aspect-ratio:16/8;border:0;margin:16px 16px 0;--k:9px;clip-path:polygon(var(--k) 0,calc(100% - var(--k)) 0,100% var(--k),100% calc(100% - var(--k)),calc(100% - var(--k)) 100%,var(--k) 100%,0 calc(100% - var(--k)),0 var(--k))}
+.card.ch .b{padding:20px 26px 22px}
+.card.ch .foot{border-top:1px dashed var(--fr-line)}
+.sc.ch{--c:12px;background:none;border:0}
+.sc.ch img{--k:7px;clip-path:polygon(var(--k) 0,calc(100% - var(--k)) 0,100% var(--k),100% calc(100% - var(--k)),calc(100% - var(--k)) 100%,var(--k) 100%,0 calc(100% - var(--k)),0 var(--k))}
+.addr .dot{display:none}
+
+/* Events: only the departure board */
+.three{grid-template-columns:1.22fr 1fr;max-width:980px}
+@media (max-width:860px){.three{grid-template-columns:1fr;max-width:560px}}
+.eb{display:flex;flex-direction:column;background:#1C1D1F;border-radius:16px;padding:12px 12px 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -1px 0 rgba(0,0,0,.5);min-width:0;color:#FF8A2B}
+.eb .scr{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;background:#0F1011;border-radius:8px;padding:20px 24px 18px;box-shadow:inset 0 0 0 1px #000,inset 0 10px 30px rgba(0,0,0,.6)}
+.eb .scr::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
+.eb .top2{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7C5F45;margin-bottom:14px}
+.eb .top2 a{color:#C9772F;text-decoration:none}
+.eb .top2 a:hover{color:#FF8A2B}
+.eb .hd,.eb .row{display:grid;grid-template-columns:3.1em 3.5em minmax(0,1fr);gap:14px}
+.eb .hd{font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.16em;color:#8C6A4D;padding-bottom:10px;border-bottom:1px dashed #3A332D;margin-bottom:6px}
+.eb .row{font-family:"Doto",var(--mono);font-weight:900;font-size:19px;line-height:2.05;letter-spacing:.04em;text-transform:uppercase;color:#FF8A2B;text-shadow:0 0 6px rgba(255,138,43,.55)}
+.eb .rows{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
+.eb .row+.row{border-top:1px dashed #1E1C1A}
+.eb .nm{overflow:hidden;white-space:nowrap}
+.eb .nm span{display:inline-block}
+.eb .nm.long span{animation:slide var(--t,9s) ease-in-out infinite}
+@keyframes slide{0%,18%{transform:translateX(0)}55%,72%{transform:translateX(var(--d))}100%{transform:translateX(0)}}
+.eb .tick{height:44px;overflow:hidden;display:flex;align-items:center;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.eb .trk{display:flex;white-space:nowrap;font-family:"Doto",var(--mono);font-weight:900;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:#E2561F;text-shadow:0 0 6px rgba(226,86,31,.55);animation:tick 34s linear infinite}
+.eb .trk span{padding-right:2.2em}
+@keyframes tick{to{transform:translateX(-50%)}}
+@media (max-width:480px){.eb .scr{padding:16px 14px}.eb .row{font-size:15px;line-height:2.1}.eb .hd,.eb .row{gap:9px}.eb .hd{font-size:11px}}
+@media (prefers-reduced-motion:reduce){.eb .trk{animation:none}.eb .nm.long span{animation:none}}
+"""
+
+def g_board():
+    rows = ''.join(f'<div class="row" role="row" aria-label="{d} {t} {n}"><span class="sc8" aria-hidden="true">{d}</span><span class="sc8" aria-hidden="true">{t}</span><span class="nm" aria-hidden="true"><span class="sc8">{n}</span></span></div>' for d, t, n in EVENTS)
+    tick = 'Upcoming events · 1680 Mission Street, San Francisco · All events →'
+    return f"""<article class="eb rv" aria-label="Upcoming events">
+      <div class="scr" role="table" aria-label="Upcoming events">
+        <div class="top2"><span>Upcoming events</span><a href="#">All events →</a></div>
+        <div class="hd" role="row"><span>DAY</span><span>TIME</span><span>EVENT</span></div>
+        <div class="rows">{rows}</div>
+      </div>
+      <div class="tick" aria-hidden="true"><div class="trk"><span>{tick}</span><span>{tick}</span><span>{tick}</span><span>{tick}</span></div></div>
+    </article>"""
+
+G_BOARD_JS = """<script>(function(){
+  var board=document.querySelector('.eb');if(!board)return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cells=[].slice.call(board.querySelectorAll('.sc8')),glyphs='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-!';
+  cells.forEach(function(c){c.dataset.t=c.textContent});
+  function fit(){[].forEach.call(board.querySelectorAll('.nm'),function(n){var s=n.firstElementChild;n.classList.remove('long');var over=s.scrollWidth-n.clientWidth;if(over>2){n.classList.add('long');s.style.setProperty('--d',-(over+6)+'px');s.style.setProperty('--t',(6+over/22).toFixed(1)+'s')}})}
+  function scramble(c,delay){var t=c.dataset.t,n=t.length,f=0,steps=n+8;setTimeout(function tick(){var out='';for(var i=0;i<n;i++){var ch=t[i];out+=(ch===' '||i<f-8)?ch:glyphs[Math.random()*glyphs.length|0]}c.textContent=out;f++;if(f<=steps)setTimeout(tick,38);else c.textContent=t},delay)}
+  function row(r,base){[].forEach.call(r.querySelectorAll('.sc8'),function(c,i){scramble(c,base+i*90)})}
+  var rows=[].slice.call(board.querySelectorAll('.row'));
+  (document.fonts&&document.fonts.ready||Promise.resolve()).then(fit);addEventListener('resize',fit);
+  if(reduce||!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();rows.forEach(function(r,i){row(r,250+i*170)});
+    setInterval(function(){row(rows[Math.random()*rows.length|0],0)},9000)}},{threshold:.35});
+  io.observe(board);
+})();</script>
+</body>"""
+
 def g_build():
     h = d_build().replace('Mox · D2 · The Building, in full', 'Mox · G2 · The building as a diagram')
     h = h.replace(h[h.index('https://fonts.googleapis.com/css2?family=Libre'):h.index('"', h.index('https://fonts.googleapis.com/css2?family=Libre'))], G_FONTS, 1)
@@ -841,6 +919,13 @@ def g_build():
   b.onclick=function(){var t=isDark()?'light':'dark';r.dataset.theme=t;try{localStorage.setItem('mox-theme',t)}catch(e){}};
 })();</script>
 </body>""", 1)
+    h = h.replace('</style>', G_FRAME_CSS + '</style>', 1)
+    h = h.replace('<span class="dot" aria-hidden="true"></span>', '', 1)
+    h, n = _re.subn(r'<article class="card rv">(?:(?!</article>).)*?<h3>Upcoming events</h3>.*?</article>', g_board(), h, count=1, flags=_re.S)
+    assert n == 1
+    h = h.replace('<article class="card rv">', '<article class="card ch dbl rv"><span class="ch-in" aria-hidden="true"></span>', 1)
+    h = h.replace('<article class="sc">', '<article class="sc ch">')
+    h = h.replace('</body>', G_BOARD_JS, 1)
     return h
 
 for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build), ('f2', f_build), ('g2', g_build)):
