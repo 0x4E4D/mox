@@ -680,7 +680,79 @@ def f_build():
     h = h.replace('</body>', picker, 1)
     return h
 
-for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build), ('f2', f_build)):
+# =====================================================================
+# G2 · D2 with the building drawn up as a parts diagram: who we gather, labeled on the building
+# =====================================================================
+# (label, target x %, target y % on sketch.png, side)
+DIAGRAM = [
+    ('Startup founders', 21, 13, 'l'), ('Alignment researchers', 27, 24, 'l'), ('Effective altruists', 32, 34, 'l'),
+    ('Writers', 38, 44, 'l'), ('Filmmakers', 44, 53, 'l'),
+    ('Community builders', 62, 26, 'r'), ('Designers', 70, 40, 'r'), ('Hackers', 64, 50, 'r'),
+    ('Musicians', 70, 59, 'r'), ('Gamers', 65, 70, 'r'),
+]
+G_CSS = """
+/* Parts-diagram labels on the building. Lines: 1.2px hairlines; text: mono in a paper-colored chip so lines tuck under it. */
+.dg{position:absolute;inset:0;pointer-events:none;opacity:var(--lbo,1)}
+.dg svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.dg path{fill:none;stroke:#C3C8CE;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.dg circle{fill:#8C96A0}
+.dg path.halo{stroke:var(--paper);stroke-width:6;opacity:.92}
+.dl{position:absolute;transform:translateY(-50%);font-family:var(--mono);font-size:13px;letter-spacing:-.01em;line-height:1.25;color:#586874;background:var(--paper);border-radius:5px;padding:2px 7px;white-space:nowrap}
+.dl.l{right:calc(100% - var(--x));text-align:right}
+.dl.r{left:var(--x)}
+.dcap{position:absolute;right:calc(100% - var(--x));transform:translateY(-50%);padding:0 7px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8C96A0;white-space:nowrap}
+.js .dg path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.6,0,.2,1)}
+.js .dg circle{opacity:0;transition:opacity .4s}
+.js .dl,.js .dcap{opacity:0;transition:opacity .6s ease,transform .6s ease}
+.js .dl.l{transform:translate(6px,-50%)}.js .dl.r{transform:translate(-6px,-50%)}
+.js .dg.on path{stroke-dashoffset:0}
+.js .dg.on circle{opacity:1}
+.js .dg.on .dl{opacity:1;transform:translateY(-50%)}
+.js .dg.on .dcap{opacity:1}
+.dg-m{display:none}
+@media (max-width:700px){.dg-d{display:none}.dg-m{display:block}.dl{font-size:10px;padding:1px 4px;white-space:normal;max-width:92px}.dcap{font-size:9.5px;padding:0 4px}.dg path{stroke-width:3.6}.dg path.halo{stroke-width:10}.dg circle{r:6px}}
+@media (prefers-reduced-motion:reduce){.js .dg path{stroke-dashoffset:0;transition:none}.js .dl,.js .dcap,.js .dg circle{opacity:1;transition:none}}
+"""
+
+def g_diagram(cls, LX, RX, spread):
+    """One diagram layer. Coordinates are in the drawing's own 690x600 pixel space so lines never distort."""
+    W_, H_ = 690, 600
+    paths, chips, dots = [], [], []
+    lefts = [d for d in DIAGRAM if d[3] == 'l']; rights = [d for d in DIAGRAM if d[3] == 'r']
+    for col in (lefts, rights):
+        for n, (name, tx, ty, side) in enumerate(col):
+            k = DIAGRAM.index((name, tx, ty, side))
+            ly = (spread[0] + (spread[1] - spread[0]) * n / (len(col) - 1)) if spread else (ty - 3 if side == 'l' else ty + 3)
+            X, Y, LYp = tx * W_ / 100, ty * H_ / 100, ly * H_ / 100
+            if side == 'l':
+                x0 = LX * W_ / 100 + 6; xm = X - 46
+                p = f'M{x0:.1f},{LYp:.1f} L{xm:.1f},{LYp:.1f} C{xm + 24:.1f},{LYp:.1f} {X - 26:.1f},{Y:.1f} {X - 4:.1f},{Y:.1f}'
+            else:
+                x0 = RX * W_ / 100 - 6; xm = X + 46
+                p = f'M{x0:.1f},{LYp:.1f} L{xm:.1f},{LYp:.1f} C{xm - 24:.1f},{LYp:.1f} {X + 26:.1f},{Y:.1f} {X + 4:.1f},{Y:.1f}'
+            paths.append(f'<path class="halo" pathLength="1" d="{p}" style="transition-delay:{k * .09:.2f}s"/><path pathLength="1" d="{p}" style="transition-delay:{k * .09:.2f}s"/>')
+            dots.append(f'<circle cx="{X:.1f}" cy="{Y:.1f}" r="3.2" style="transition-delay:{.75 + k * .09:.2f}s"/>')
+            x = LX if side == 'l' else RX
+            chips.append(f'<span class="dl {side}" style="--x:{x}%;top:{ly:.1f}%;transition-delay:{.4 + k * .09:.2f}s">{name}</span>')
+    capy = (spread[0] if spread else lefts[0][2] - 3) - 9
+    cap = (f'<span class="dcap" style="left:50%;right:auto;transform:translate(-50%,-50%);top:-14%">Who we gather</span>' if spread
+           else f'<span class="dcap" style="--x:{LX}%;top:{capy:.1f}%">Who we gather</span>')
+    return f'<div class="dg {cls}"><svg viewBox="0 0 {W_} {H_}" preserveAspectRatio="none" aria-hidden="true">{"".join(paths)}{"".join(dots)}</svg>{cap}{"".join(chips)}</div>'
+
+def g_build():
+    h = d_build().replace('Mox · D2 · The Building, in full', 'Mox · G2 · The building as a diagram')
+    h = h.replace('</style>', G_CSS + '</style>', 1)
+    dg = g_diagram('dg-d', -14, 114, None) + g_diagram('dg-m', -6, 106, (-4, 92))
+    h = h.replace('<div class="bg" aria-hidden="true">', '<div class="bg">', 1)
+    h = h.replace('    <div class="lines"></div>', '    <div class="lines" aria-hidden="true"></div>\n    ' + dg, 1)
+    h = h.replace("var w=Math.min(innerWidth*0.96,1100,room*690/600);",
+                  "var ph=innerWidth<700;var w=Math.min(innerWidth*(ph?0.56:0.96),1100,room*690/600,ph?1e9:(innerWidth-40)/1.75);", 1)
+    h = h.replace("root.style.setProperty('--bo',(1-.76*p).toFixed(3));",
+                  "root.style.setProperty('--bo',(1-.76*p).toFixed(3));root.style.setProperty('--lbo',Math.max(0,1-p*2.2).toFixed(3));", 1)
+    h = h.replace("layout();onScroll();", "layout();onScroll();setTimeout(function(){[].forEach.call(document.querySelectorAll('.dg'),function(d){d.classList.add('on')})},reduce?0:650);", 1)
+    return h
+
+for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build), ('f2', f_build), ('g2', g_build)):
     open(f'{D}/site/{name}.html', 'w').write(fn())
-import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2','e2','f2')])
+import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2','e2','f2','g2')])
 print('ok')
