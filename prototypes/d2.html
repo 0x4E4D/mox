@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head><script>document.documentElement.className="js"</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mox · D2 · The Building, in full</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one centered column, like today's moxsf.com. The building drawing sits behind the hero; the elevator indicator is the navigation. */
+:root{
+  --paper:#F9FAFA; --card:#FFFFFF; --concrete:#E0E1E2; --ink:#1E1B18; --ink-2:#5B5550; --rule:#D6D6D3;
+  --rust:#7A3305; --rust-2:#5E2703; --signal:#EB5809; --green:#4C7D52;
+  --display:"Libre Caslon Display","Libre Caslon Text",Georgia,serif;
+  --text:"Libre Caslon Text",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.col{max-width:1000px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.1;text-wrap:balance}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding:12px 18px;border:1px solid var(--rust);border-radius:2px;transition:transform .12s,box-shadow .12s,background .2s}
+.btn.solid{background:var(--rust);color:#fff;box-shadow:0 3px 0 var(--rust-2)}
+.btn.solid:hover{background:#8A3B07}
+.btn.solid:active{transform:translateY(3px);box-shadow:none}
+.btn.line{color:var(--rust);background:var(--card)}
+.btn.line:hover{background:#F6EEE8}
+
+/* Top strip */
+.top{display:flex;justify-content:flex-end;align-items:center;gap:22px;padding-block:14px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;position:relative;z-index:2}
+.top a.l{text-decoration:none;color:var(--ink-2)}
+.top a.l:hover{color:var(--ink)}
+
+/* Hero: centered lockup over the drawing */
+.stage{position:relative;overflow:hidden;padding-bottom:8px}
+.hero{position:relative;text-align:center;padding-block:18px 52px}
+.bg{position:absolute;left:50%;top:-10px;width:min(1500px,170vw);aspect-ratio:690/600;transform:translateX(-50%);pointer-events:none}
+.bg .lines{position:absolute;inset:0;background:var(--ink);opacity:.13;-webkit-mask:url(img/sketch.png) no-repeat center/contain;mask:url(img/sketch.png) no-repeat center/contain}
+.win{position:absolute;background:#F3A35B;opacity:0;animation:glow 16s ease-in-out infinite}
+@keyframes glow{0%,15%{opacity:0}30%,70%{opacity:.32}85%,100%{opacity:0}}
+.fade{position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,var(--paper))}
+.hero .in{position:relative}
+.lockup{display:inline-flex;align-items:center;gap:18px;text-decoration:none}
+.mark{width:132px;height:108px;background:var(--ink);-webkit-mask:url(img/mark.svg) no-repeat center/contain;mask:url(img/mark.svg) no-repeat center/contain}
+.word{font-family:var(--display);font-size:104px;line-height:1;letter-spacing:-.01em}
+.tag{font-size:clamp(19px,2.1vw,23px);margin:22px auto 0;max-width:30em;line-height:1.5}
+.tag em{font-weight:700;color:var(--rust);white-space:nowrap}
+.addr{display:inline-flex;align-items:center;gap:9px;margin-top:14px;font-family:var(--mono);font-size:13px;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rule)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 3.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,125,82,.45)}70%{box-shadow:0 0 0 9px rgba(76,125,82,0)}100%{box-shadow:0 0 0 0 rgba(76,125,82,0)}}
+.ctas{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:28px}
+@media (max-width:620px){.mark{width:76px;height:62px}.word{font-size:62px}.lockup{gap:10px}}
+
+/* Three cards, all the same size */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative;margin-top:-8px}
+.card{background:var(--card);border:1px solid var(--rule);display:flex;flex-direction:column;min-width:0;box-shadow:0 1px 0 var(--rule),0 22px 34px -30px rgba(30,27,24,.5)}
+.card .ph{aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--rule)}
+.card .ph img{width:100%;height:100%;object-fit:cover;animation:drift 28s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.03)}to{transform:scale(1.09) translate(-1.5%,-1%)}}
+.card .b{padding:20px 20px 18px;display:flex;flex-direction:column;flex:1;text-align:center}
+.card h3{font-size:25px;margin-bottom:14px}
+.card .body{flex:1;text-align:left}
+.card .foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.card .foot a{color:var(--rust);text-decoration:none}
+.card .foot a:hover{text-decoration:underline}
+.ev{list-style:none;margin:0;padding:0}
+.ev li{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #EEEEEC;font-size:14.5px;line-height:1.3}
+.ev li:last-child{border-bottom:0}
+.ev .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-align:center;border:1px solid var(--ink);padding:3px 0;line-height:1.25}
+.ev .d b{display:block;font-weight:500}
+.card .who{text-align:center;display:grid;grid-template-columns:1fr 1fr;font-size:14.5px;text-align:center;align-content:start}
+.who span{padding:7px 4px;border-bottom:1px solid #EEEEEC}
+.who span:nth-child(odd){border-right:1px solid #EEEEEC}
+.ways{display:flex;flex-direction:column;gap:8px}
+.ways .btn{width:100%}
+.ways .hint{font-size:13.5px;color:var(--ink-2);text-align:center;margin-top:4px}
+@media (max-width:860px){.three{grid-template-columns:1fr;max-width:460px;margin-inline:auto}}
+
+/* Sections */
+section{padding-block:76px 0;text-align:center}
+.floor{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.floor b{display:inline-grid;place-items:center;width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;color:var(--ink);font-weight:500}
+section h2{font-size:clamp(32px,4vw,46px);margin-top:12px}
+section .sub{color:var(--ink-2);max-width:34em;margin:12px auto 0}
+
+/* Photo grid: one rhythm, no ragged edges */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:32px}
+.photos figure{margin:0;overflow:hidden;aspect-ratio:4/3;background:var(--concrete)}
+.photos figure.tall{grid-row:span 2;aspect-ratio:auto}
+.photos img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.photos figure:hover img{transform:scale(1.03)}
+@media (max-width:620px){.photos{grid-template-columns:1fr 1fr}.photos figure.tall{grid-row:auto;aspect-ratio:4/3}}
+
+/* Humans */
+.quote{font-family:var(--display);font-size:clamp(26px,3.2vw,38px);line-height:1.25;max-width:22em;margin:26px auto 0;min-height:2.6em}
+.quote .what{font-family:var(--text);font-style:italic;color:var(--rust)}
+.quote span{transition:opacity .6s}
+.quote.out span{opacity:0}
+.humans{margin-top:34px;text-align:left;border-top:1px solid var(--ink)}
+.h{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--concrete);display:grid;place-items:center;font-family:var(--mono);font-size:13px;color:var(--ink-2)}
+.h .n{font-size:16px}
+.h .n b{font-weight:700}
+.h .n i{color:var(--rust)}
+.h .r{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);text-align:right}
+@media (max-width:560px){.h{grid-template-columns:44px 1fr}.h .r{grid-column:2;text-align:left}}
+.counts{display:flex;justify-content:center;gap:36px;margin-top:24px;flex-wrap:wrap}
+.counts b{display:block;font-family:var(--display);font-weight:400;font-size:42px;line-height:1}
+.counts span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink-2)}
+
+/* Directory board */
+.board{max-width:560px;margin:32px auto 0;background:#22201E;border:10px solid #3B3733;border-radius:4px;padding:20px 24px;color:#F2EFEA;font-family:var(--mono);font-size:13.5px;letter-spacing:.08em;text-transform:uppercase;text-align:left;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 22px)}
+.board h4{margin:0 0 12px;font-weight:500;text-align:center;letter-spacing:.3em}
+.board .row{display:flex;justify-content:space-between;gap:16px;line-height:22px}
+.board .row span:last-child{color:#E7D7B8}
+.board .fl{color:#9A948C;margin-top:8px}
+.partners{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-top:28px;font-family:var(--mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+
+.close{padding-block:80px;text-align:center}
+.close h2{font-size:clamp(34px,4.4vw,52px)}
+footer{border-top:1px solid var(--rule);padding-block:24px 90px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+
+/* Elevator indicator */
+.elevator{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:14px;padding:9px 16px;border-radius:6px;
+  background:linear-gradient(180deg,#EDEEEF 0%,#C9CBCD 48%,#DADCDD 52%,#BFC1C3 100%);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 #9FA2A5,0 10px 24px -12px rgba(0,0,0,.45);font-family:var(--mono)}
+.elevator a{font-size:19px;line-height:1;text-decoration:none;color:#45484B;font-weight:500;transition:color .35s,text-shadow .35s}
+.elevator a.on{color:var(--signal);text-shadow:0 0 8px rgba(235,88,9,.75)}
+.elevator .lbl{font-size:10px;letter-spacing:.14em;color:#45484B;text-transform:uppercase;border-left:1px solid #A9ACAF;padding-left:12px;min-width:78px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* Partner logos: monochrome strip, company colors on hover */
+.logos{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 40px;margin:30px auto 0;max-width:940px}
+.lg{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--lg-ink);font-family:var(--lg-font);font-size:13px;letter-spacing:.1em;text-transform:uppercase;transition:color .25s}
+.lg img{height:34px;width:auto;display:block;filter:grayscale(1) contrast(1.05);opacity:.72;mix-blend-mode:multiply;transition:filter .3s,opacity .3s}
+.lg.tile img{height:30px;border-radius:6px}
+.lg.white img{height:24px;filter:brightness(0);opacity:.62}
+.lg.bluedot img{height:22px}
+.lg.sentient img{height:40px}
+.lg:hover{color:var(--lg-hover)}
+.lg:hover img{filter:none;opacity:1}
+.lg.white:hover img{filter:brightness(0);opacity:.9}
+.guest{margin-top:8px}
+.guest a{color:var(--lg-hover)}
+html,body{overflow-x:clip}
+
+:root{--lg-ink:var(--ink-2);--lg-hover:var(--rust);--lg-font:var(--mono)}
+.who-list{display:grid;grid-template-columns:1fr 1fr;font-size:14.5px;text-align:center}
+.who-list span{padding:7px 4px;border-bottom:1px solid #EEEEEC}
+.who-list span:nth-child(odd){border-right:1px solid #EEEEEC}
+.photos{grid-template-columns:repeat(3,1fr)}
+.photos figure{aspect-ratio:4/3}
+.staff{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px;text-align:left}
+.sc{display:grid;grid-template-columns:112px 1fr;gap:18px;background:var(--card);border:1px solid var(--rule);padding:16px;min-width:0}
+.sc img{width:112px;height:112px;object-fit:cover;filter:grayscale(.15)}
+.sc .role{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink-2)}
+.sc h4{font-family:var(--text);font-weight:400;font-size:17px;margin:4px 0 8px;line-height:1.35}
+.sc h4 b{font-weight:700}
+.sc h4 i{color:var(--rust)}
+.tags{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-family:var(--mono);font-size:11px}
+.tags .k{color:var(--ink-2);margin-right:2px}
+.tags span:not(.k){border:1px solid var(--rule);padding:2px 7px;color:var(--ink)}
+.sc .mail{display:block;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--rust)}
+.grp{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:40px 0 0;text-align:left;border-bottom:1px solid var(--ink);padding-bottom:8px;display:flex;justify-content:space-between}
+.mem{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px;text-align:left}
+.m{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule);min-width:0}
+.m img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.m p{margin:0;font-size:15px;line-height:1.35}
+.m b{font-weight:700}
+.m i{color:var(--rust)}
+.m small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+@media (max-width:760px){.staff,.mem{grid-template-columns:1fr}.sc{grid-template-columns:84px 1fr}.sc img{width:84px;height:84px}}
+footer a{color:inherit}
+
+/* D2: the first screen is only the lockup, the tagline and the whole building. Content rises in as you scroll. */
+.bg{position:fixed;left:50%;top:var(--bt,240px);width:var(--bw,600px);transform:translateX(-50%);z-index:0;transition:opacity .2s linear}
+.bg .lines{opacity:.42}
+.bg{opacity:var(--bo,1)}
+.stage{overflow:visible;padding:0}
+.hero{min-height:100vh;min-height:100svh;padding-block:18px 0;display:flex;flex-direction:column}
+.hero .in{z-index:1}
+.cue{margin-top:auto;padding-bottom:18px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;position:relative;z-index:1;transition:opacity .3s}
+.cue i{display:block;width:1px;height:26px;background:var(--ink-2);transform-origin:top;animation:cue 2.8s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.after{position:relative;z-index:1}
+.three{margin-top:0}
+.top{position:relative;z-index:2}
+main,footer{position:relative;z-index:1}
+footer{background:var(--paper)}
+.board{position:relative}
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.elevator{opacity:0;pointer-events:none;transition:opacity .4s}
+.elevator.show{opacity:1;pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.cue i{animation:none;transform:none}.bg{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="col top"><a class="l" href="#partners">Partner Orgs</a><a class="l" href="#space">The Space</a><a class="l" href="#humans">Mox Humans</a><a class="btn solid" href="#" style="padding:8px 14px">Login</a></div>
+<div class="stage">
+  <div class="bg" aria-hidden="true">
+    <div class="lines"></div>
+    <span class="win" style="left:57.2%;top:38.6%;width:5.9%;height:6%"></span>
+    <span class="win" style="left:66%;top:48.2%;width:5.9%;height:6%;animation-delay:-6s"></span>
+    <span class="win" style="left:57.2%;top:58.2%;width:5.9%;height:6%;animation-delay:-11s"></span>
+    
+  </div>
+  <header class="hero"><div class="col in">
+    <a class="lockup" href="#" aria-label="Mox"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>
+    <p class="tag">A research-focused incubator &amp; community space for <em>doers of good</em> and <em>masters of craft</em>.</p>
+    <a class="addr" href="#"><span class="dot" aria-hidden="true"></span>1680 Mission Street, San Francisco</a>
+  </div><a class="cue" href="#enter" id="cue">Scroll to enter<i></i></a></header>
+  <div class="col after" id="enter"><div class="three">
+    <article class="card rv"><div class="ph"><img src="img/site-014.jpg" alt="A talk in the lounge"></div><div class="b"><h3>Upcoming events</h3><ul class="ev body"><li><span class="d"><b>WED</b>4PM</span>Mox-Giving</li><li><span class="d"><b>WED</b>5PM</span>AI-Philosophy Writing Group</li><li><span class="d"><b>FRI</b>6PM</span>Band Setup + Practice</li><li><span class="d"><b>SAT</b>7PM</span>Mox-tunies! Live Band Karaoke</li><li><span class="d"><b>MON</b>7PM</span>SF Lean Meetup</li></ul><div class="foot"><a href="#">All events →</a></div></div></article>
+    <article class="card rv"><div class="ph"><img src="img/site-023.jpg" alt="A speaker presenting a chart" style="animation-delay:-9s"></div><div class="b"><h3>Who we gather</h3><div class="who-list body"><span>Startup founders</span><span>Effective altruists</span><span>Alignment researchers</span><span>Filmmakers</span><span>Writers</span><span>Musicians</span><span>Community builders</span><span>Hackers</span><span>Designers</span><span>Gamers</span></div><div class="foot"><a href="#humans">See people →</a></div></div></article>
+    <article class="card rv"><div class="ph"><img src="img/site-003.jpg" alt="A meeting room with a city view" style="animation-delay:-16s"></div><div class="b"><h3>Space for meaningful work</h3><div class="ways body"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Inquire about offices</a><a class="btn line" href="#">Buy a day pass</a></div><div class="foot"><a href="#">Member portal →</a></div></div></article>
+  </div></div>
+</div>
+<main class="col">
+  <section id="partners" data-floor="1" data-name="Partner Orgs">
+    <span class="rv floor"><b>1</b>Partner Orgs</span>
+    <p class="rv sub guest">Learn more about our <a href="#">guest program</a></p>
+    <div class="rv logos"><a class="lg tile" href="https://manifund.org/acx-grants"><img src="img/logo/acx.png" alt="ACX Grants"><span>ACX Grants</span></a><a class="lg white" href="https://intelligence.org/"><img src="img/logo/miri.png" alt="MIRI"></a><a class="lg white" href="https://far.ai/"><img src="img/logo/far.png" alt="FAR.AI"></a><a class="lg tile" href="https://elicit.com/"><img src="img/logo/elicit.png" alt="Elicit"><span>Elicit</span></a><a class="lg tile" href="https://aiimpacts.org/"><img src="img/logo/aiimpacts.png" alt="Impacts"><span>Impacts</span></a><a class="lg tile" href="https://rootsofprogress.org/"><img src="img/logo/rop.png" alt="Roots of Progress"><span>Roots of Progress</span></a><a class="lg tile" href="https://epoch.ai/"><img src="img/logo/epoch.png" alt="Epoch"><span>Epoch</span></a><a class="lg white bluedot" href="https://bluedot.org/"><img src="img/logo/bluedot.png" alt="BlueDot Impact"></a><a class="lg plain" href="https://www.lightconeinfrastructure.com/"><img src="img/logo/lightcone.png" alt="Lightcone"><span>Lightcone</span></a><a class="lg tile" href="https://seldonlab.com/"><img src="img/logo/seldon.png" alt="Seldon"><span>Seldon</span></a><a class="lg plain" href="https://governance.ai/"><img src="img/logo/govai.png" alt="GovAI"><span>GovAI</span></a><a class="lg plain" href="https://www.alignment.org/"><img src="img/logo/arc.png" alt="ARC"><span>ARC</span></a><a class="lg plain" href="https://redwoodresearch.org/"><img src="img/logo/redwood.png" alt="Redwood"><span>Redwood</span></a><a class="lg plain" href="https://palisaderesearch.org/"><img src="img/logo/palisade.png" alt="Palisade"><span>Palisade</span></a><a class="lg plain" href="https://timaeus.co/"><img src="img/logo/timaeus.png" alt="Timaeus"><span>Timaeus</span></a><a class="lg plain sentient" href="https://www.sentientfutures.ai/"><img src="img/logo/sentient.png" alt="Sentient Futures"></a></div>
+  </section>
+  <section id="space" data-floor="2" data-name="The Space">
+    <span class="rv floor"><b>2</b>The Space</span>
+    <div class="rv photos"><figure><img src="img/site-024.jpg" alt="A crowded open floor during an event"></figure><figure><img src="img/site-002.jpg" alt="The lounge with grey sofas"></figure><figure><img src="img/site-026.jpg" alt="A reading group around a table on a colorful rug"></figure><figure><img src="img/site-007.jpg" alt="Wooden tables by sunny windows"></figure><figure><img src="img/site-021.jpg" alt="Members making letters with their bodies in front of the green wall"></figure><figure><img src="img/site-018.jpg" alt="Two members and a baby laughing"></figure><figure><img src="img/site-025.jpg" alt="A member and a kid playing a game on the floor"></figure><figure><img src="img/site-009.jpg" alt="White chairs set up for a talk"></figure><figure><img src="img/site-016.jpg" alt="A member working in front of a projected screen"></figure></div>
+  </section>
+  <section id="humans" data-floor="3" data-name="Mox Humans">
+    <span class="rv floor"><b>3</b>Mox Humans</span>
+    <div class="rv counts"><div><b>215</b><span>MEMBERS</span></div></div>
+    <div class="grp rv"><span>Staff</span></div>
+    <div class="rv staff"><article class="sc"><img src="img/people/austin-chen.jpg" alt="Austin Chen"><div><span class="role">CEO OF MANIFUND</span><h4><b>Austin Chen</b> is into <i>effective altruism funding</i> and <i>Catholic faith &amp; philosophy</i></h4><div class="tags"><span class="k">contact for:</span><span>Strategic Partnerships</span><span>Custom Requests</span></div><span class="mail">austin@moxsf.com</span></div></article><article class="sc"><img src="img/people/leilani-bellamy.jpg" alt="Leilani Bellamy"><div><span class="role">DIRECTOR</span><h4><b>Leilani Bellamy</b> is into <i>Art of Accomplishment</i> and <i>niche bodywork</i></h4><div class="tags"><span class="k">contact for:</span><span>Strategic Partnerships</span><span>Custom Requests</span><span>Events</span><span>Private Offices</span></div><span class="mail">leilani@moxsf.com</span></div></article><article class="sc"><img src="img/people/carolina-oliveira.jpg" alt="Carolina Oliveira"><div><span class="role">COMMUNITY AND FELLOWSHIPS</span><h4><b>Carolina Oliveira</b> </h4><div class="tags"><span class="k">contact for:</span><span>Global Expert Fellowship</span><span>Events</span><span>Fellowships</span><span>Strategic Partnerships</span><span>Membership</span><span>Private Offices</span></div><span class="mail">carolina@moxsf.com</span></div></article><article class="sc"><img src="img/people/robin-goins.jpg" alt="Robin Goins"><div><span class="role">HEAD OF OPERATIONS</span><h4><b>Robin Goins</b> is into <i>understanding understanding</i></h4><div class="tags"><span class="k">contact for:</span><span>Venue Rental</span><span>Private Offices</span><span>Events</span><span>Membership</span><span>Member Events</span><span>Event support</span></div><span class="mail">robin@moxsf.com</span></div></article></div>
+    <div class="grp rv"><span>Members</span><a href="#" style="color:var(--rust);text-decoration:none">See people →</a></div>
+    <div class="rv mem"><div class="m"><img src="img/people/lily-shi.jpg" alt="Lily Shi"><p><small>Pivotal Fellows</small><b>Lily Shi</b> is into <i>LLM interpretability</i> and <i>dance</i></p></div><div class="m"><img src="img/people/jez-ng.jpg" alt="Jez Ng"><p><small>Members</small><b>Jez Ng</b> is into <i>building the fastest mach-o linker</i> and <i>growing mushrooms</i></p></div><div class="m"><img src="img/people/kara-presbrey.jpg" alt="Kara Presbrey"><p><small>Members</small><b>Kara Presbrey</b> is into <i>aligned BCI</i> and <i>scuba diving</i></p></div><div class="m"><img src="img/people/haoxing-du.jpg" alt="Haoxing Du"><p><small>Surplus</small><b>Haoxing Du</b> is into <i>real-world agent traces</i> and <i>paragliding</i></p></div><div class="m"><img src="img/people/kris-gulati.jpg" alt="Kris Gulati"><p><small>Members</small><b>Kris Gulati</b> is into <i>economics of AI</i> and <i>origami</i></p></div><div class="m"><img src="img/people/leona-mollica.jpg" alt="Leona Mollica"><p><small>Members</small><b>Leona Mollica</b> is into <i>Decision theory foundations</i> and <i>Calligraphy</i></p></div><div class="m"><img src="img/people/timothy-zhou.jpg" alt="Timothy Zhou"><p><small>Members</small><b>Timothy Zhou</b> is into <i>LLM jailbreak interpretability</i> and <i>composing chamber music</i></p></div><div class="m"><img src="img/people/helen-tsim.jpg" alt="Helen Tsim"><p><small>The Frame</small><b>Helen Tsim</b> is into <i>AI safety communications</i> and <i>Improv Comedy</i></p></div><div class="m"><img src="img/people/ran-sun.jpg" alt="Ran Sun"><p><small>Members</small><b>Ran Sun</b> is into <i>US/China AI Safety Coordination</i> and <i>Rock Climbing</i></p></div><div class="m"><img src="img/people/william-jarrold.jpg" alt="William Jarrold"><p><small>Members</small><b>William Jarrold</b> is into <i>Mechanistic Interpretability</i> and <i>Jazz Piano</i></p></div><div class="m"><img src="img/people/avi-sundaresan.jpg" alt="Avi Sundaresan"><p><small>Talarion</small><b>Avi Sundaresan</b> is into <i>world-state compression</i> and <i>espresso</i></p></div><div class="m"><img src="img/people/tomas-guarna.jpg" alt="Tomás Guarna"><p><small>Members</small><b>Tomás Guarna</b> is into <i>Anthropology+History of Safety</i> and <i>Typefaces</i></p></div><div class="m"><img src="img/people/max-feldman.jpg" alt="Max Feldman"><p><small>Members</small><b>Max Feldman</b> is into <i>Software Verification</i> and <i>Distance Running</i></p></div><div class="m"><img src="img/people/aidan-kankyoku.jpg" alt="Aidan Kankyoku"><p><small>Sentient Futures</small><b>Aidan Kankyoku</b> is into <i>AI for animal welfare</i> and <i>Japanese tea ceremony</i></p></div><div class="m"><img src="img/people/peter-chatain.jpg" alt="Peter Chatain"><p><small>Members</small><b>Peter Chatain</b> is into <i>agent foundations</i> and <i>olympic rowing</i></p></div><div class="m"><img src="img/people/christine-shiba.jpg" alt="Christine Shiba"><p><small>Surplus</small><b>Christine Shiba</b> is into <i>social infrastructure</i> and <i>climbing</i></p></div><div class="m"><img src="img/people/julie-steele.jpg" alt="Julie Steele"><p><small>Members</small><b>Julie Steele</b> is into <i>AI safety</i> and <i>dancing</i></p></div><div class="m"><img src="img/people/keshav-shenoy.jpg" alt="Keshav Shenoy"><p><small>Members</small><b>Keshav Shenoy</b> is into <i>aligning ai models</i> and <i>birds</i></p></div><div class="m"><img src="img/people/alan-tan.jpg" alt="Alan Tan"><p><small>Members</small><b>Alan Tan</b> is into <i>value learning</i> and <i>advanced meditation</i></p></div><div class="m"><img src="img/people/hudson-mitchell-pullman.jpg" alt="Hudson Mitchell-Pullman"><p><small>Surplus</small><b>Hudson Mitchell-Pullman</b> is into <i>learning science</i> and <i>coffee (oatmilk lattes)</i></p></div></div>
+  </section>
+  <section id="offices" data-floor="4" data-name="Offices">
+    <span class="rv floor"><b>4</b>Offices</span>
+    <div class="rv board" role="table" aria-label="Offices"><h4>1680 · OFFICES</h4><div class="row fl"><span>— 200s —</span><span></span></div><div class="row"><span>Gutenberg</span><span>201</span></div><div class="row"><span>Netholabs</span><span>203</span></div><div class="row"><span>The Relationship Company</span><span>204</span></div><div class="row"><span>Neolithic</span><span>205</span></div><div class="row fl"><span>— 300s —</span><span></span></div><div class="row"><span>Haptica</span><span>302</span></div><div class="row"><span>Deep AI</span><span>302</span></div><div class="row"><span>Tampersec</span><span>304</span></div><div class="row"><span>Confluence</span><span>306</span></div><div class="row fl"><span>— 400s —</span><span></span></div><div class="row"><span>Chips for Humanity / Hofvarpnir Studios</span><span>403</span></div><div class="row"><span>hum.ai</span><span>404</span></div><div class="row"><span>Talarion</span><span>406</span></div><div class="row"><span>Sentient Futures</span><span>409, 408</span></div><div class="row"><span>Tabula Bio</span><span>411</span></div><div class="row"><span>Stardrift</span><span>412</span></div></div>
+  </section>
+  <section class="close" style="padding-block:70px 40px">
+    <div class="rv ctas"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Inquire about offices</a><a class="btn line" href="#">Buy a day pass</a></div>
+    <p class="sub" style="margin-top:22px">Questions? Contact <a href="#">robin@moxsf.com</a></p>
+  </section>
+</main>
+<footer>A project of Manifund · <a href="#">Donate</a></footer>
+<nav class="elevator" aria-label="Sections">
+  <a href="#partners" data-f="1">1</a><a href="#space" data-f="2">2</a><a href="#humans" data-f="3">3</a><a href="#offices" data-f="4">4</a>
+  <span class="lbl" id="flbl">Lobby</span>
+</nav>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.elevator a')),lbl=document.getElementById('flbl'),secs=[].slice.call(document.querySelectorAll('section[data-floor]'));
+  function upd(){var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){if(s.getBoundingClientRect().top+scrollY<=mid){f=+s.dataset.floor;n=s.dataset.name}});links.forEach(function(a){a.classList.toggle('on',+a.dataset.f===f)});lbl.textContent=n}
+  addEventListener('scroll',upd,{passive:true});upd();
+})();
+</script>
+
+<script>
+(function(){
+  var root=document.documentElement,bg=document.querySelector('.bg'),txt=document.querySelector('.hero .in'),cue=document.getElementById('cue'),el=document.querySelector('.elevator');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hero=document.querySelector('.hero');
+  function layout(){
+    if(scrollY<5) hero.style.minHeight=(innerHeight-hero.getBoundingClientRect().top)+'px';
+    var top=txt.getBoundingClientRect().bottom+(scrollY>0?0:0)+18, room=innerHeight-top-(cue.offsetHeight+14);
+    if(scrollY>0) top=parseFloat(root.style.getPropertyValue('--bt'))||top;
+    var w=Math.min(innerWidth*0.96,1100,room*690/600);
+    var t=top+Math.max(0,(room-w*600/690)/2);
+    root.style.setProperty('--bw',w+'px');root.style.setProperty('--bt',t+'px');
+  }
+  function onScroll(){
+    var p=Math.min(1,scrollY/(innerHeight*.8));
+    root.style.setProperty('--bo',(1-.76*p).toFixed(3));
+    cue.style.opacity=1-Math.min(1,p*3);
+    el.classList.toggle('show',p>.6);
+  }
+  layout();onScroll();
+  addEventListener('resize',function(){if(scrollY<5)layout()});
+  addEventListener('scroll',onScroll,{passive:true});
+  var items=[].slice.call(document.querySelectorAll('.rv'));
+  if(reduce||!('IntersectionObserver' in window)){items.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var d=0;if(e.target.classList.contains('card'))d=[].indexOf.call(e.target.parentNode.children,e.target)*140;e.target.style.transitionDelay=d+'ms';e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});
+  items.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body></html>

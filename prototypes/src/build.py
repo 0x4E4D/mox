@@ -372,6 +372,81 @@ def c_build():
 </script>
 </body></html>'''
 
-for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build)):
+
+# =====================================================================
+# D2 · The Building, in full: the drawing first, content arrives on scroll
+# =====================================================================
+D_CSS = """
+/* D2: the first screen is only the lockup, the tagline and the whole building. Content rises in as you scroll. */
+.bg{position:fixed;left:50%;top:var(--bt,240px);width:var(--bw,600px);transform:translateX(-50%);z-index:0;transition:opacity .2s linear}
+.bg .lines{opacity:.42}
+.bg{opacity:var(--bo,1)}
+.stage{overflow:visible;padding:0}
+.hero{min-height:100vh;min-height:100svh;padding-block:18px 0;display:flex;flex-direction:column}
+.hero .in{z-index:1}
+.cue{margin-top:auto;padding-bottom:18px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;position:relative;z-index:1;transition:opacity .3s}
+.cue i{display:block;width:1px;height:26px;background:var(--ink-2);transform-origin:top;animation:cue 2.8s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.after{position:relative;z-index:1}
+.three{margin-top:0}
+.top{position:relative;z-index:2}
+main,footer{position:relative;z-index:1}
+footer{background:var(--paper)}
+.board{position:relative}
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.elevator{opacity:0;pointer-events:none;transition:opacity .4s}
+.elevator.show{opacity:1;pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.cue i{animation:none;transform:none}.bg{transition:none}}
+"""
+
+def d_build():
+    h = a_build().replace('Mox · A2 · The Building', 'Mox · D2 · The Building, in full')
+    h = h.replace('</style>', D_CSS + '</style>', 1)
+    h = h.replace('<html lang="en">', '<html lang="en"><script>document.documentElement.className="js"</script>', 1) if False else h.replace('<head>', '<head><script>document.documentElement.className="js"</script>', 1)
+    h = h.replace('<div class="fade"></div>', '')
+    # close the hero after the address with a scroll cue, then put the three cards below it
+    h = h.replace('</div></header>\n  <div class="col"><div class="three">',
+                  '</div><a class="cue" href="#enter" id="cue">Scroll to enter<i></i></a></header>\n  <div class="col after" id="enter"><div class="three">', 1)
+    # reveal targets
+    h = h.replace('<article class="card">', '<article class="card rv">')
+    for tag in ('<span class="floor">', '<p class="sub guest">', '<div class="logos">', '<div class="photos">', '<div class="counts">', '<div class="staff">', '<div class="mem">', '<div class="board"', '<div class="ctas">'):
+        h = h.replace(tag, tag.replace('class="', 'class="rv ', 1))
+    h = h.replace('<div class="grp">', '<div class="grp rv">')
+    js = """
+<script>
+(function(){
+  var root=document.documentElement,bg=document.querySelector('.bg'),txt=document.querySelector('.hero .in'),cue=document.getElementById('cue'),el=document.querySelector('.elevator');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hero=document.querySelector('.hero');
+  function layout(){
+    if(scrollY<5) hero.style.minHeight=(innerHeight-hero.getBoundingClientRect().top)+'px';
+    var top=txt.getBoundingClientRect().bottom+(scrollY>0?0:0)+18, room=innerHeight-top-(cue.offsetHeight+14);
+    if(scrollY>0) top=parseFloat(root.style.getPropertyValue('--bt'))||top;
+    var w=Math.min(innerWidth*0.96,1100,room*690/600);
+    var t=top+Math.max(0,(room-w*600/690)/2);
+    root.style.setProperty('--bw',w+'px');root.style.setProperty('--bt',t+'px');
+  }
+  function onScroll(){
+    var p=Math.min(1,scrollY/(innerHeight*.8));
+    root.style.setProperty('--bo',(1-.76*p).toFixed(3));
+    cue.style.opacity=1-Math.min(1,p*3);
+    el.classList.toggle('show',p>.6);
+  }
+  layout();onScroll();
+  addEventListener('resize',function(){if(scrollY<5)layout()});
+  addEventListener('scroll',onScroll,{passive:true});
+  var items=[].slice.call(document.querySelectorAll('.rv'));
+  if(reduce||!('IntersectionObserver' in window)){items.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var d=0;if(e.target.classList.contains('card'))d=[].indexOf.call(e.target.parentNode.children,e.target)*140;e.target.style.transitionDelay=d+'ms';e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});
+  items.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body></html>"""
+    h = h.replace('if(s.offsetTop<=mid)', 'if(s.getBoundingClientRect().top+scrollY<=mid)')
+    h = h.replace('</body></html>', js, 1)
+    return h
+
+for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build)):
     open(f'{D}/site/{name}.html', 'w').write(fn())
 print('ok')
