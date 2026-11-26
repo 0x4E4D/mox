@@ -449,4 +449,5 @@ def d_build():
 
 for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build)):
     open(f'{D}/site/{name}.html', 'w').write(fn())
+import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2')])
 print('ok')
