@@ -177,9 +177,8 @@ html,body{overflow-x:clip}
 .m small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 @media (max-width:760px){.staff,.mem{grid-template-columns:1fr}.sc{grid-template-columns:84px 1fr}.sc img{width:84px;height:84px}}
 footer a{color:inherit}
-.arrs{display:flex;flex-direction:column;gap:3px;padding-right:12px;border-right:1px solid #A9ACAF}
-.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:18px;height:13px;border-radius:2px}
-.arr svg{width:10px;height:8px;fill:#45484B;transition:fill .3s,filter .3s}
+.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:20px;height:22px;border-radius:3px}
+.arr svg{width:11px;height:9px;fill:#45484B;transition:fill .3s,filter .3s}
 .arr:hover svg{fill:#1E1B18}
 .arr.lit svg{fill:var(--signal);filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
 .arr:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
@@ -320,8 +319,9 @@ footer{background:var(--paper)}
 </main>
 <footer>A project of Manifund · <a href="#">Donate</a></footer>
 <nav class="elevator" aria-label="Sections">
-  <span class="arrs"><button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button><button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button></span>
+  <button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button>
   <a href="#partners" data-f="1">1</a><a href="#space" data-f="2">2</a><a href="#humans" data-f="3">3</a><a href="#offices" data-f="4">4</a>
+  <button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button>
   <span class="lbl" id="flbl">Lobby</span>
 </nav>
 <script>

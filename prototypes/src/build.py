@@ -80,9 +80,8 @@ a_css = css['a2'] + LOGO_CSS + '''
 .m small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 @media (max-width:760px){.staff,.mem{grid-template-columns:1fr}.sc{grid-template-columns:84px 1fr}.sc img{width:84px;height:84px}}
 footer a{color:inherit}
-.arrs{display:flex;flex-direction:column;gap:3px;padding-right:12px;border-right:1px solid #A9ACAF}
-.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:18px;height:13px;border-radius:2px}
-.arr svg{width:10px;height:8px;fill:#45484B;transition:fill .3s,filter .3s}
+.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:20px;height:22px;border-radius:3px}
+.arr svg{width:11px;height:9px;fill:#45484B;transition:fill .3s,filter .3s}
 .arr:hover svg{fill:#1E1B18}
 .arr.lit svg{fill:var(--signal);filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
 .arr:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
@@ -151,8 +150,9 @@ def a_build():
 </main>
 <footer>{FOOT_COPY}</footer>
 <nav class="elevator" aria-label="Sections">
-  <span class="arrs"><button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button><button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button></span>
+  <button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button>
   <a href="#partners" data-f="1">1</a><a href="#space" data-f="2">2</a><a href="#humans" data-f="3">3</a><a href="#offices" data-f="4">4</a>
+  <button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button>
   <span class="lbl" id="flbl">Lobby</span>
 </nav>
 <script>
@@ -547,7 +547,140 @@ def e_build():
     h = h.replace('</body>', flick, 1)
     return h
 
-for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build)):
+# =====================================================================
+# F2 · D2 baseline; Who we gather drawn as one floor; events on the black board; join options to compare
+# =====================================================================
+import sys as _sys
+_sys.path.insert(0, f'{D}/scene')
+import scene as _scene
+
+F_CSS = """
+:root{--screen:#0E0F0F;--amber:#FF8A2B;--dots:"Doto","IBM Plex Mono",monospace;--lip:#4A1F03}
+/* Who we gather: one floor, ten people */
+.gw{text-align:center;margin-top:8px}
+.gw h3,.two h3{font-family:var(--display);font-weight:400}
+.gw h3{font-size:clamp(34px,4vw,46px);margin:0 0 6px}
+.scene{margin-top:18px;margin-inline:calc(50% - min(680px,50vw - 16px));background:var(--card);border:1px solid var(--rule);padding:18px 18px 8px;box-shadow:0 1px 0 var(--rule),0 22px 34px -30px rgba(30,27,24,.5)}
+.scene svg{display:block;width:100%;height:auto}
+.scene .note{animation:note 5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.scene .note.n1{animation-delay:-1.7s}.scene .note.n2{animation-delay:-3.4s}
+@keyframes note{0%{opacity:0;transform:translateY(6px)}30%,60%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
+.scene .rec{animation:blink 2.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+.scene .cursor{animation:blink 1.1s steps(2) infinite}
+.scene .px{animation:px 7s ease-in-out infinite}
+.scene .px:nth-child(3n){animation-delay:-2s}.scene .px:nth-child(4n){animation-delay:-4.5s}
+@keyframes px{50%{opacity:.15}}
+.scene .pen{animation:pen 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0 100%}
+@keyframes pen{50%{transform:translate(3px,1px) rotate(4deg)}}
+.swipe{display:none;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-top:8px}
+@media (max-width:760px){.scene{overflow-x:auto;padding:12px 0 4px;-webkit-overflow-scrolling:touch}.scene svg{width:980px;max-width:none;margin:0 12px}.swipe{display:block}}
+/* Events + space for meaningful work: two equal cards */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.two .card .ph{aspect-ratio:16/8}
+.board{border:7px solid #1B1C1D;background:var(--screen);border-radius:6px;padding:12px 16px;font-family:var(--dots);font-weight:700;font-size:17px;line-height:1.85;color:var(--amber);text-shadow:0 0 6px rgba(255,138,43,.6);text-transform:uppercase;box-shadow:inset 0 0 0 1px #000;position:relative;overflow:hidden;text-align:left}
+.board::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);pointer-events:none}
+.board .hd{display:grid;grid-template-columns:2.8em 3.2em 1fr;gap:10px;font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.14em;color:#8C6A4D;text-shadow:none;border-bottom:1px solid #2A2B2C;padding-bottom:3px;margin-bottom:3px}
+.board .r{display:grid;grid-template-columns:2.8em 3.2em 1fr;gap:10px;border-bottom:1px dashed #1F2020;line-height:1.35;padding-block:6px}
+.board .r:last-child{border-bottom:0}
+.board .r.flip span:last-child{animation:flip .5s steps(3)}
+@keyframes flip{0%{opacity:.1}50%{opacity:.6}100%{opacity:1}}
+@media (max-width:860px){.two{grid-template-columns:1fr;max-width:520px;margin-inline:auto}}
+@media (max-width:480px){.board{font-size:15px;padding:10px 12px}.board .r,.board .hd{grid-template-columns:2.5em 2.9em 1fr;gap:7px}}
+/* Join options: only the chosen one shows */
+.jv{display:none}
+body[data-join="1"] .jv.v1,body[data-join="2"] .jv.v2,body[data-join="3"] .jv.v3,body[data-join="4"] .jv.v4{display:flex}
+.door{display:none}
+body[data-join="4"] .door{display:flex}
+.jv{flex-direction:column;gap:12px;flex:1;justify-content:center}
+/* 1 · Passes: two tickets with a perforated stub */
+.passes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pass{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:150px;padding:16px 16px 14px 26px;text-decoration:none;color:var(--ink);background:#FFFFFF;border:1px solid var(--rule);text-align:left;
+  -webkit-mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px);mask:radial-gradient(circle 7px at 0 50%,transparent 6.5px,#000 7px);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
+.pass::before{content:"";position:absolute;left:12px;top:10px;bottom:10px;border-left:1.5px dashed currentColor;opacity:.35}
+.pass .pm{width:28px;height:23px;background:currentColor;-webkit-mask:url(img/mark.svg) no-repeat center/contain;mask:url(img/mark.svg) no-repeat center/contain;opacity:.85}
+.pass b{font-family:var(--display);font-weight:400;font-size:24px;line-height:1.1}
+.pass .go{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:flex;justify-content:space-between}
+.pass.primary{background:var(--rust);color:#FFF8F1;border-color:var(--rust)}
+.pass:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:0 14px 22px -14px rgba(30,27,24,.45)}
+.pass:hover .go span:last-child{transform:translateX(3px)}
+.pass .go span:last-child{transition:transform .3s}
+.textlink{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rust);text-decoration:none;text-align:center;padding-top:4px}
+.textlink:hover{text-decoration:underline}
+/* 2 · Editorial: the actions as big serif lines */
+.ed a{display:flex;justify-content:space-between;align-items:baseline;gap:12px;text-decoration:none;border-top:1px solid var(--rule);padding:14px 2px 12px;color:var(--ink);text-align:left}
+.ed a:last-child{border-bottom:1px solid var(--rule)}
+.ed a b{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,32px);line-height:1.1}
+.ed a.primary b{color:var(--rust);font-style:italic}
+.ed a.small b{font-size:20px;color:var(--ink-2)}
+.ed a i{font-style:normal;font-family:var(--mono);font-size:18px;color:var(--rust);transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.ed a:hover i{transform:translateX(6px)}
+.ed a:hover b{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px}
+/* 3 · Pressable: two big keys with a lip */
+.pk{position:relative;display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-radius:6px;text-decoration:none;font-family:var(--mono);font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:transform .12s,box-shadow .12s}
+.pk.primary{background:var(--rust);color:#fff;box-shadow:0 5px 0 var(--lip),0 14px 20px -12px rgba(74,31,3,.6)}
+.pk.second{background:#FFFFFF;color:var(--ink);border:1.5px solid var(--ink);box-shadow:0 5px 0 var(--ink)}
+.pk:hover{transform:translateY(-1px)}
+.pk.primary:hover{box-shadow:0 6px 0 var(--lip),0 16px 22px -12px rgba(74,31,3,.6)}
+.pk.second:hover{box-shadow:0 6px 0 var(--ink)}
+.pk:active{transform:translateY(5px);box-shadow:0 0 0 var(--lip)!important}
+.pk i{font-style:normal;font-size:18px}
+/* 4 · At the door: the two passes sit right under the building on the first screen */
+.hfoot{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative;z-index:1}
+.hfoot .cue{margin-top:0}
+.door{gap:12px;justify-content:center;flex-wrap:wrap}
+.door .pk{padding:15px 20px;gap:18px;min-width:250px}
+.v4 .btn{width:100%}
+.two .card .body{display:flex;flex-direction:column;justify-content:center}
+/* review control, not part of the site */
+.picker{position:fixed;left:164px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:4px;padding:5px;border-radius:999px;background:#1E1B18;color:#F9FAFA;font-family:var(--mono);font-size:11px;letter-spacing:.06em;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.picker>span{padding:0 8px 0 10px;opacity:.7;text-transform:uppercase}
+.picker button{all:unset;cursor:pointer;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.picker button[aria-pressed="true"]{background:#F9FAFA;color:#1E1B18}
+.picker button:focus-visible{outline:2px solid var(--signal)}
+@media (max-width:1100px){.picker>span{display:none}}
+@media (max-width:620px){.picker{left:92px}.elevator{bottom:calc(62px + env(safe-area-inset-bottom,0px))}.picker>span{display:none}.picker button .w{display:none}}
+"""
+
+def f_build():
+    h = d_build().replace('Mox · D2 · The Building, in full', 'Mox · F2 · Who we gather, drawn')
+    h = h.replace('</style>', F_CSS + '</style>', 1)
+    h = h.replace('<head>', '<head><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@700&display=swap">', 1)
+    h = h.replace('<body>', '<body data-join="1">', 1) if '<body>' in h else h.replace('<body ', '<body data-join="1" ', 1)
+    # hero foot: door buttons (option 4) above the scroll cue
+    door = '<div class="door"><a class="pk primary" href="#">Apply for membership<i>→</i></a><a class="pk second" href="#">Buy a day pass<i>→</i></a></div>'
+    h = h.replace('<a class="cue" href="#enter" id="cue">Scroll to enter<i></i></a>', f'<div class="hfoot">{door}<a class="cue" href="#enter" id="cue">Scroll to enter<i></i></a></div>', 1)
+    h = h.replace("room=innerHeight-top-(cue.offsetHeight+14)", "room=innerHeight-top-(document.querySelector('.hfoot').offsetHeight+14)", 1)
+    h = h.replace("layout();onScroll();", "layout();onScroll();window.__layout=layout;", 1)
+    i = h.index('<div class="three">'); j = h.index('</div>\n</div>\n<main', i)
+    rows = ''.join(f'<div class="r"><span>{d}</span><span>{t.upper()}</span><span>{n}</span></div>' for d, t, n in EVENTS)
+    join = f"""
+      <div class="jv v1"><div class="passes"><a class="pass primary" href="#"><span class="pm"></span><b>Apply for membership</b><span class="go"><span>moxsf.com</span><span>→</span></span></a><a class="pass" href="#"><span class="pm"></span><b>Buy a day pass</b><span class="go"><span>moxsf.com</span><span>→</span></span></a></div><a class="textlink" href="#">Inquire about offices →</a></div>
+      <div class="jv v2 ed"><a class="primary" href="#"><b>Apply for membership</b><i>→</i></a><a href="#"><b>Buy a day pass</b><i>→</i></a><a class="small" href="#"><b>Inquire about offices</b><i>→</i></a></div>
+      <div class="jv v3"><a class="pk primary" href="#">Apply for membership<i>→</i></a><a class="pk second" href="#">Buy a day pass<i>→</i></a><a class="textlink" href="#">Inquire about offices →</a></div>
+      <div class="jv v4"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Inquire about offices</a><a class="btn line" href="#">Buy a day pass</a></div>"""
+    block = f"""<div class="gw rv"><h3>Who we gather</h3><div class="scene">{_scene.build()}</div><div class="swipe">← swipe the floor →</div></div>
+    <div class="two">
+      <article class="card rv"><div class="ph"><img src="img/site-014.jpg" alt="A talk in the lounge"></div><div class="b"><h3>Upcoming events</h3><div class="body"><div class="board" id="board" role="table" aria-label="Upcoming events"><div class="hd"><span>DAY</span><span>TIME</span><span>EVENT</span></div>{rows}</div></div><div class="foot"><a href="#">All events →</a></div></div></article>
+      <article class="card rv"><div class="ph"><img src="img/site-003.jpg" alt="A meeting room with a city view" style="animation-delay:-16s"></div><div class="b"><h3>Space for meaningful work</h3><div class="body" style="display:flex">{join}</div><div class="foot"><a href="#">Member portal →</a></div></div></article>
+    </div>"""
+    h = h[:i] + block + h[j:]
+    h = h.replace('<article class="card rv">', '<article class="card rv">')
+    picker = """<div class="picker" role="group" aria-label="Compare join options"><span>Join options</span><button type="button" data-j="1" aria-pressed="true">1<span class="w"> Passes</span></button><button type="button" data-j="2" aria-pressed="false">2<span class="w"> Editorial</span></button><button type="button" data-j="3" aria-pressed="false">3<span class="w"> Pressable</span></button><button type="button" data-j="4" aria-pressed="false">4<span class="w"> At the door</span></button></div>
+<script>(function(){
+  var bs=[].slice.call(document.querySelectorAll('.picker button'));
+  function set(j,jump){document.body.dataset.join=j;bs.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.j===j)});try{localStorage.setItem('mox-join',j)}catch(e){}
+    if(j==='4'&&jump){scrollTo(0,0);setTimeout(function(){window.__layout&&window.__layout()},30)}else if(window.__layout&&scrollY<5)window.__layout()}
+  bs.forEach(function(b){b.onclick=function(){set(b.dataset.j,true)}});
+  var saved;try{saved=localStorage.getItem('mox-join')}catch(e){}
+  if(saved)set(saved,false);
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var rows=document.querySelectorAll('#board .r'),i=0;setInterval(function(){var r=rows[i%rows.length];r.classList.remove('flip');void r.offsetWidth;r.classList.add('flip');i++},2600)}
+})();</script>
+</body>"""
+    h = h.replace('</body>', picker, 1)
+    return h
+
+for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build), ('f2', f_build)):
     open(f'{D}/site/{name}.html', 'w').write(fn())
-import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2','e2')])
+import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2','e2','f2')])
 print('ok')
