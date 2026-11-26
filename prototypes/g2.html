@@ -309,7 +309,7 @@ h1,h2,h3{font-weight:700}
 /* Events: only the departure board */
 .three{grid-template-columns:1.22fr 1fr;max-width:980px}
 @media (max-width:860px){.three{grid-template-columns:1fr;max-width:560px}}
-.eb{display:flex;flex-direction:column;background:#1C1D1F;border-radius:16px;padding:12px 12px 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -1px 0 rgba(0,0,0,.5);min-width:0;color:#FF8A2B}
+.eb{display:flex;flex-direction:column;background:#1C1D1F;border-radius:16px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -1px 0 rgba(0,0,0,.5);min-width:0;color:#FF8A2B}
 .eb .scr{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;background:#0F1011;border-radius:8px;padding:20px 24px 18px;box-shadow:inset 0 0 0 1px #000,inset 0 10px 30px rgba(0,0,0,.6)}
 .eb .scr::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px)}
 .eb .top2{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7C5F45;margin-bottom:14px}
@@ -322,14 +322,13 @@ h1,h2,h3{font-weight:700}
 .eb .row+.row{border-top:1px dashed #1E1C1A}
 .eb .nm{overflow:hidden;white-space:nowrap}
 .eb .nm span{display:inline-block}
-.eb .nm.long span{animation:slide var(--t,9s) ease-in-out infinite}
-@keyframes slide{0%,18%{transform:translateX(0)}55%,72%{transform:translateX(var(--d))}100%{transform:translateX(0)}}
-.eb .tick{height:44px;overflow:hidden;display:flex;align-items:center;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.eb .trk{display:flex;white-space:nowrap;font-family:"Doto",var(--mono);font-weight:900;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:#E2561F;text-shadow:0 0 6px rgba(226,86,31,.55);animation:tick 34s linear infinite}
-.eb .trk span{padding-right:2.2em}
-@keyframes tick{to{transform:translateX(-50%)}}
+.eb .rows{position:relative}
+.eb .row{align-items:center}
+/* the LED panel: a canvas of dots over the rows; the HTML rows stay underneath for screen readers and as the no-script fallback */
+.eb canvas.led{position:absolute;left:0;top:0;pointer-events:none;filter:drop-shadow(0 0 3px rgba(255,138,43,.62))}
+.eb.on-led .row{color:transparent;text-shadow:none}
 @media (max-width:480px){.eb .scr{padding:16px 14px}.eb .row{font-size:15px;line-height:2.1}.eb .hd,.eb .row{gap:9px}.eb .hd{font-size:11px}}
-@media (prefers-reduced-motion:reduce){.eb .trk{animation:none}.eb .nm.long span{animation:none}}
+@media (prefers-reduced-motion:reduce){.eb .nm{white-space:normal;line-height:1.35;padding:.45em 0}}
 </style>
 </head>
 <body>
@@ -354,9 +353,8 @@ h1,h2,h3{font-weight:700}
       <div class="scr" role="table" aria-label="Upcoming events">
         <div class="top2"><span>Upcoming events</span><a href="#">All events →</a></div>
         <div class="hd" role="row"><span>DAY</span><span>TIME</span><span>EVENT</span></div>
-        <div class="rows"><div class="row" role="row" aria-label="WED 4pm Mox-Giving"><span class="sc8" aria-hidden="true">WED</span><span class="sc8" aria-hidden="true">4pm</span><span class="nm" aria-hidden="true"><span class="sc8">Mox-Giving</span></span></div><div class="row" role="row" aria-label="WED 5pm AI-Philosophy Writing Group"><span class="sc8" aria-hidden="true">WED</span><span class="sc8" aria-hidden="true">5pm</span><span class="nm" aria-hidden="true"><span class="sc8">AI-Philosophy Writing Group</span></span></div><div class="row" role="row" aria-label="FRI 6pm Band Setup + Practice"><span class="sc8" aria-hidden="true">FRI</span><span class="sc8" aria-hidden="true">6pm</span><span class="nm" aria-hidden="true"><span class="sc8">Band Setup + Practice</span></span></div><div class="row" role="row" aria-label="SAT 7pm Mox-tunies! Live Band Karaoke"><span class="sc8" aria-hidden="true">SAT</span><span class="sc8" aria-hidden="true">7pm</span><span class="nm" aria-hidden="true"><span class="sc8">Mox-tunies! Live Band Karaoke</span></span></div><div class="row" role="row" aria-label="MON 7pm SF Lean Meetup"><span class="sc8" aria-hidden="true">MON</span><span class="sc8" aria-hidden="true">7pm</span><span class="nm" aria-hidden="true"><span class="sc8">SF Lean Meetup</span></span></div></div>
+        <div class="rows"><div class="row" role="row" aria-label="WED 4pm Mox-Giving"><span aria-hidden="true">WED</span><span aria-hidden="true">4pm</span><span class="nm" aria-hidden="true"><span>Mox-Giving</span></span></div><div class="row" role="row" aria-label="WED 5pm AI-Philosophy Writing Group"><span aria-hidden="true">WED</span><span aria-hidden="true">5pm</span><span class="nm" aria-hidden="true"><span>AI-Philosophy Writing Group</span></span></div><div class="row" role="row" aria-label="FRI 6pm Band Setup + Practice"><span aria-hidden="true">FRI</span><span aria-hidden="true">6pm</span><span class="nm" aria-hidden="true"><span>Band Setup + Practice</span></span></div><div class="row" role="row" aria-label="SAT 7pm Mox-tunies! Live Band Karaoke"><span aria-hidden="true">SAT</span><span aria-hidden="true">7pm</span><span class="nm" aria-hidden="true"><span>Mox-tunies! Live Band Karaoke</span></span></div><div class="row" role="row" aria-label="MON 7pm SF Lean Meetup"><span aria-hidden="true">MON</span><span aria-hidden="true">7pm</span><span class="nm" aria-hidden="true"><span>SF Lean Meetup</span></span></div></div>
       </div>
-      <div class="tick" aria-hidden="true"><div class="trk"><span>Upcoming events · 1680 Mission Street, San Francisco · All events →</span><span>Upcoming events · 1680 Mission Street, San Francisco · All events →</span><span>Upcoming events · 1680 Mission Street, San Francisco · All events →</span><span>Upcoming events · 1680 Mission Street, San Francisco · All events →</span></div></div>
     </article>
     <article class="card ch dbl rv"><span class="ch-in" aria-hidden="true"></span><div class="ph"><img src="img/site-003.jpg" alt="A meeting room with a city view" style="animation-delay:-16s"></div><div class="b"><h3>Space for meaningful work</h3><div class="ways body"><a class="btn solid" href="#">Apply for membership</a><a class="btn line" href="#">Inquire about offices</a><a class="btn line" href="#">Buy a day pass</a></div><div class="foot"><a href="#">Member portal →</a></div></div></article>
   </div></div>
@@ -442,17 +440,59 @@ h1,h2,h3{font-weight:700}
 })();</script>
 <script>(function(){
   var board=document.querySelector('.eb');if(!board)return;
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var cells=[].slice.call(board.querySelectorAll('.sc8')),glyphs='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-!';
-  cells.forEach(function(c){c.dataset.t=c.textContent});
-  function fit(){[].forEach.call(board.querySelectorAll('.nm'),function(n){var s=n.firstElementChild;n.classList.remove('long');var over=s.scrollWidth-n.clientWidth;if(over>2){n.classList.add('long');s.style.setProperty('--d',-(over+6)+'px');s.style.setProperty('--t',(6+over/22).toFixed(1)+'s')}})}
-  function scramble(c,delay){var t=c.dataset.t,n=t.length,f=0,steps=n+8;setTimeout(function tick(){var out='';for(var i=0;i<n;i++){var ch=t[i];out+=(ch===' '||i<f-8)?ch:glyphs[Math.random()*glyphs.length|0]}c.textContent=out;f++;if(f<=steps)setTimeout(tick,38);else c.textContent=t},delay)}
-  function row(r,base){[].forEach.call(r.querySelectorAll('.sc8'),function(c,i){scramble(c,base+i*90)})}
-  var rows=[].slice.call(board.querySelectorAll('.row'));
-  (document.fonts&&document.fonts.ready||Promise.resolve()).then(fit);addEventListener('resize',fit);
-  if(reduce||!('IntersectionObserver' in window))return;
-  var io=new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();rows.forEach(function(r,i){row(r,250+i*170)});
-    setInterval(function(){row(rows[Math.random()*rows.length|0],0)},9000)}},{threshold:.35});
-  io.observe(board);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var cv=document.createElement('canvas');if(!cv.getContext)return;var ctx=cv.getContext('2d');
+  var rowsEl=board.querySelector('.rows'),rows=[].slice.call(rowsEl.querySelectorAll('.row'));
+  cv.className='led';cv.setAttribute('aria-hidden','true');rowsEl.appendChild(cv);board.classList.add('on-led');
+  var G={"A":[126,17,17,17,126],"B":[127,73,73,73,54],"C":[62,65,65,65,34],"D":[127,65,65,34,28],"E":[127,73,73,73,65],"F":[127,9,9,9,1],"G":[62,65,73,73,122],"H":[127,8,8,8,127],"I":[0,65,127,65,0],"J":[32,64,65,63,1],"K":[127,8,20,34,65],"L":[127,64,64,64,64],"M":[127,2,12,2,127],"N":[127,4,8,16,127],"O":[62,65,65,65,62],"P":[127,9,9,9,6],"Q":[62,65,81,33,94],"R":[127,9,25,41,70],"S":[70,73,73,73,49],"T":[1,1,127,1,1],"U":[63,64,64,64,63],"V":[31,32,64,32,31],"W":[63,64,56,64,63],"X":[99,20,8,20,99],"Y":[7,8,112,8,7],"Z":[97,81,73,69,67],"0":[62,81,73,69,62],"1":[0,66,127,64,0],"2":[66,97,81,73,70],"3":[33,65,69,75,49],"4":[24,20,18,127,16],"5":[39,69,69,69,57],"6":[60,74,73,73,48],"7":[1,113,9,5,3],"8":[54,73,73,73,54],"9":[6,73,73,41,30],"-":[8,8,8,8,8],"+":[8,8,62,8,8],"!":[95],".":[96,96],":":[54,54],",":[80,48],"'":[5,3],"&":[54,73,85,34,80],"/":[32,16,8,4,2]," ":[0,0,0]},ON='#FF8A2B',GAP=9;
+  function cols(s){s=s.toUpperCase();var o=[];for(var i=0;i<s.length;i++){var g=G[s[i]]||G[' '];if(i)o.push(0);for(var c=0;c<g.length;c++)o.push(g[c])}return o}
+  function hs(x,y){var n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n)}
+  var P,R,W,H,dpr,fields=[],longs=[],grid=document.createElement('canvas');
+  function layout(){
+    dpr=Math.min(window.devicePixelRatio||1,3);
+    var r=rowsEl.getBoundingClientRect();W=r.width;H=r.height;
+    var dp=Math.max(4,Math.round((innerWidth<480?2.3:2.6)*dpr));P=dp/dpr;R=P*.42;
+    cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);cv.style.width=W+'px';cv.style.height=H+'px';
+    var nx=Math.floor(W/P),ny=Math.floor(H/P);
+    grid.width=cv.width;grid.height=cv.height;var g=grid.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.fillStyle='rgba(255,138,43,.06)';g.beginPath();
+    for(var y=0;y<ny;y++)for(var x=0;x<nx;x++){g.moveTo((x+.5)*P+R,(y+.5)*P);g.arc((x+.5)*P,(y+.5)*P,R,0,6.2832)}g.fill();
+    // unlit dots fade out toward the panel edges so the grid has no hard border
+    g.globalCompositeOperation='destination-in';var e=14,v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(e/H,'#000');v.addColorStop(1-e/H,'#000');v.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=v;g.fillRect(0,0,W,H);
+    var hz=g.createLinearGradient(0,0,W,0);hz.addColorStop(0,'rgba(0,0,0,0)');hz.addColorStop(e/W,'#000');hz.addColorStop(1-e/W,'#000');hz.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=hz;g.fillRect(0,0,W,H);g.globalCompositeOperation='source-over';
+    var keep={};fields.forEach(function(f){keep[f.key]=f});fields=[];longs=[];
+    rows.forEach(function(row,ri){var rr=row.getBoundingClientRect(),gy=Math.round((rr.top+rr.height/2-r.top)/P-3.5);
+      [].forEach.call(row.children,function(sp,k){var sr=sp.getBoundingClientRect(),x0=Math.round((sr.left-r.left)/P),x1=k<2?x0+Math.floor(sr.width/P):nx-1;
+        var f={key:ri+':'+k,ri:ri,gy:gy,x0:x0,vis:Math.max(1,x1-x0),c:cols(sp.textContent),off:0};f.long=f.c.length>f.vis;
+        var old=keep[f.key];if(old&&f.long)f.off=Math.min(old.off,f.c.length+GAP-1);
+        fields.push(f);if(f.long)longs.push(f)})});
+    draw(performance.now(),false)}
+  var start=-1,tick=0,glitch={},turn=0,hold=40,last=0,running=false;
+  function spawn(ghost){for(var n=0;n<5;n++){var f=fields[Math.random()*fields.length|0],L=Math.min(f.vis,f.c.length),i=Math.random()*L|0,ci=f.long?(f.off+i)%(f.c.length+GAP):i,m=ci<f.c.length?f.c[ci]:0,r=Math.random()*7|0;
+      if(!m&&!ghost)continue;var lit=(m>>r)&1;if(ghost===!!lit)continue;
+      glitch[(f.x0+i)*1024+f.gy+r]={g:ghost,lv:ghost?.16+Math.random()*.14:.06+Math.random()*.22,end:tick+(ghost?3+Math.random()*6:2+Math.random()*6)|0};return}}
+  function step(){tick++;
+    for(var k in glitch)if(glitch[k].end<=tick)delete glitch[k];
+    var n=Math.random()<.5?1:Math.random()<.6?2:3;while(n--)spawn(false);
+    if(Math.random()<.18)spawn(true);
+    if(longs.length&&tick*80>1600){var f=longs[turn%longs.length];if(hold>0)hold--;else{f.off++;if(f.off>=f.c.length+GAP){f.off=0;turn++;hold=22}}}}
+  function draw(now,anim){
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);ctx.drawImage(grid,0,0);ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(start<0)return;var t=now-start,b=[[],[],[]],sp=[],done=true;
+    fields.forEach(function(f){var per=f.c.length+GAP,L=f.long?f.vis:Math.min(f.vis,f.c.length),d=f.ri*130;
+      for(var i=0;i<L;i++){var ci=f.long?(f.off+i)%per:i;if(ci>=f.c.length)continue;var m=f.c[ci];if(!m)continue;var x=f.x0+i;
+        for(var r=0;r<7;r++)if((m>>r)&1){var y=f.gy+r,h=hs(x,y);if(anim!==false&&t<d+h*720){done=false;continue}
+          var q=glitch[x*1024+y];if(q&&!q.g){sp.push(x,y,q.lv);continue}b[(h*977|0)%3].push(x,y)}}});
+    ctx.fillStyle=ON;[.86,.94,1].forEach(function(a,k){var p=b[k];if(!p.length)return;ctx.globalAlpha=a;ctx.beginPath();
+      for(var j=0;j<p.length;j+=2){var cx=(p[j]+.5)*P,cy=(p[j+1]+.5)*P;ctx.moveTo(cx+R,cy);ctx.arc(cx,cy,R,0,6.2832)}ctx.fill()});
+    for(var j=0;j<sp.length;j+=3){ctx.globalAlpha=sp[j+2];ctx.beginPath();ctx.arc((sp[j]+.5)*P,(sp[j+1]+.5)*P,R,0,6.2832);ctx.fill()}
+    for(var k in glitch){var q=glitch[k];if(!q.g)continue;ctx.globalAlpha=q.lv;ctx.beginPath();ctx.arc(((k/1024|0)+.5)*P,(k%1024+.5)*P,R,0,6.2832);ctx.fill()}
+    ctx.globalAlpha=1;return done}
+  function loop(now){if(!running)return;requestAnimationFrame(loop);
+    var intro=now-start<1400;if(now-last<(intro?40:80))return;last=now;if(!intro)step();draw(now)}
+  var io=new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&start<0)start=performance.now();
+    if(v&&!running){running=true;requestAnimationFrame(loop)}else if(!v)running=false},{threshold:.3});
+  layout();io.observe(board);
+  var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(layout,120)});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
 })();</script>
 <!--back--><a href="index.html" class="xback" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9999;display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:#1E1B18;color:#F9FAFA;font:500 12px/1 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;box-shadow:0 2px 0 #000,0 8px 20px -8px rgba(0,0,0,.45)">&larr; All<span> versions</span></a><style>@media (max-width:480px){.xback span{display:none}}@media print{.xback{display:none!important}}</style><!--/back--></body></html>
