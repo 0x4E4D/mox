@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mox · B2 · Control Panel, centered</title>
+<title>Mox · B2 · Control Panel</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Doto:wght@700;900&display=swap">
 <style>
 /* Layout: today's centered column, rebuilt as a hardware faceplate. The drawing is a blueprint behind the lockup; the three cards are three instrument panels. */
@@ -116,116 +116,117 @@ section h2{font-size:clamp(40px,5vw,60px);margin-top:10px}
 .final p{color:#B5B8BB;margin:12px 0 0}
 footer{text-align:center;padding-block:28px 40px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-2);text-transform:uppercase}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* Partner logos: monochrome strip, company colors on hover */
+.logos{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 40px;margin:30px auto 0;max-width:940px}
+.lg{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--lg-ink);font-family:var(--lg-font);font-size:13px;letter-spacing:.1em;text-transform:uppercase;transition:color .25s}
+.lg img{height:34px;width:auto;display:block;filter:grayscale(1) contrast(1.05);opacity:.72;mix-blend-mode:multiply;transition:filter .3s,opacity .3s}
+.lg.tile img{height:30px;border-radius:6px}
+.lg.white img{height:24px;filter:brightness(0);opacity:.62}
+.lg.bluedot img{height:22px}
+.lg.sentient img{height:40px}
+.lg:hover{color:var(--lg-hover)}
+.lg:hover img{filter:none;opacity:1}
+.lg.white:hover img{filter:brightness(0);opacity:.9}
+.guest{margin-top:8px}
+.guest a{color:var(--lg-hover)}
+html,body{overflow-x:clip}
+
+:root{--lg-ink:var(--ink-2);--lg-hover:var(--signal);--lg-font:var(--mono)}
+.board .r{grid-template-columns:2.4em 2.6em 1fr;white-space:normal}
+.board .r span:last-child{white-space:normal;line-height:1.3;padding-block:3px}
+.board{font-size:14px}
+.logos-panel{margin:28px auto 0;background:var(--panel);border-radius:14px;padding:26px 24px;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD}
+.logos-panel .logos{margin-top:0}
+.staff{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px;text-align:left}
+.badge{background:linear-gradient(180deg,#F1F1EF,#E2E3E3);border-radius:14px;padding:12px;box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #B9BBBD,0 20px 30px -24px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px;min-width:0}
+.badge .bz{background:#1B1C1D;border-radius:8px;padding:6px}
+.badge img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;filter:saturate(.85)}
+.badge .role{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--signal)}
+.badge h4{margin:0;font-family:var(--serif);font-weight:400;font-size:24px;line-height:1.05}
+.badge p{margin:0;font-size:13.5px;color:var(--ink-2)}
+.badge p i{font-style:normal;color:var(--ink)}
+.badge .tags{display:flex;flex-wrap:wrap;gap:5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.badge .tags span{background:var(--panel);border-radius:4px;padding:3px 6px;box-shadow:0 2px 0 #A9ABAE}
+.badge .tags .k{background:none;box-shadow:none;padding:3px 0;color:var(--ink-2)}
+.badge .mail{font-family:var(--mono);font-size:11.5px;color:var(--ink)}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;text-align:left}
+.mb{display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;background:var(--panel);border-radius:10px;padding:8px;box-shadow:inset 0 1px 0 #fff,0 1px 0 #B9BBBD;min-width:0}
+.mb img{width:48px;height:48px;border-radius:6px;object-fit:cover;box-shadow:0 0 0 3px #1B1C1D}
+.mb p{margin:0;font-size:12.5px;line-height:1.3;color:var(--ink-2)}
+.mb b{display:block;color:var(--ink);font-weight:500;font-size:13.5px}
+.mb small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal)}
+.sub-h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-2);text-transform:uppercase;margin-top:40px;display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:8px}
+@media (max-width:900px){.staff{grid-template-columns:1fr 1fr}.mgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.mgrid{grid-template-columns:1fr}.staff{gap:10px}.badge{padding:9px}.badge h4{font-size:19px}.badge .tags{font-size:9px}}
+footer a,.foot2 a{color:inherit}
 </style>
 </head>
 <body>
-<div class="col top">
-  <span><span class="led" aria-hidden="true"></span>OPEN · 1680 MISSION ST</span>
-  <nav><a href="#space">Space</a><a href="#humans">Humans</a><a class="key dark" href="#"><span class="sh"></span><span class="ed"></span><span class="fc" style="min-height:34px;padding:8px 14px;font-size:11px">Login</span></a></nav>
-</div>
 
+<div class="col top">
+  <span><span class="led" aria-hidden="true"></span>1680 MISSION STREET, SAN FRANCISCO</span>
+  <nav><a href="#partners">Partner Orgs</a><a href="#space">The Space</a><a href="#humans">Mox Humans</a><a class="key dark" href="#"><span class="sh"></span><span class="ed"></span><span class="fc" style="min-height:34px;padding:8px 14px;font-size:11px">Login</span></a></nav>
+</div>
 <div class="stage">
-  <div class="bp" aria-hidden="true"><div class="lines"></div>
-    <div class="fade"></div></div>
+  <div class="bp" aria-hidden="true"><div class="lines"></div><div class="fade"></div></div>
   <header class="col hero">
     <a class="lockup" href="#" aria-label="Mox"><span class="mark" aria-hidden="true"></span><span class="word">Mox</span></a>
-    <p class="tag">A research-focused incubator &amp; community space for <i>doers of good</i> and <i>masters of craft.</i></p>
-    <div class="meta"><span><b>215</b> members</span><span><b>21</b> resident teams</span><span><b>4</b> fellowships</span><span><b>16</b> partner orgs</span></div>
+    <p class="tag">A research-focused incubator &amp; community space for <i>doers of good</i> and <i>masters of craft</i>.</p>
     <div class="ctas">
       <a class="key orange" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Apply for membership</span></a>
-      <a class="key" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Book a day pass</span></a>
+      <a class="key" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Buy a day pass</span></a>
     </div>
   </header>
-
   <div class="col three">
-    <article class="pnl">
-      <div class="hd"><span class="screw"></span><span class="lab">P-01 · Events</span><span class="screw"></span></div>
-      <div class="bezel"><div class="win"><img src="img/site-014.jpg" alt="A talk in the lounge with people on bean bags and sofas"></div></div>
-      <h3>Upcoming events</h3>
-      <div class="board" id="board"></div>
-      <div class="ft"><a class="key dark block" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">All events →</span></a></div>
-    </article>
-    <article class="pnl">
-      <div class="hd"><span class="screw"></span><span class="lab">P-02 · People</span><span class="screw"></span></div>
-      <div class="bezel"><div class="win"><img src="img/site-023.jpg" alt="A speaker presenting a chart to an audience"></div></div>
-      <h3>Who we gather</h3>
-      <div class="caps"><span class="cap">Alignment research</span><span class="cap">Founders</span><span class="cap">Effective altruists</span><span class="cap">Writers</span><span class="cap">Filmmakers</span><span class="cap">Musicians</span><span class="cap">Hackers</span><span class="cap">Designers</span></div>
-      <div class="ft"><a class="lnk" href="#humans">See people →</a></div>
-    </article>
-    <article class="pnl">
-      <div class="hd"><span class="screw"></span><span class="lab">P-03 · Access</span><span class="screw"></span></div>
-      <div class="bezel"><div class="win"><img src="img/site-003.jpg" alt="A meeting room with a view over the city"></div></div>
+    <article class="pnl"><div class="hd"><span class="screw"></span><span class="lab">01</span><span class="screw"></span></div>
+      <div class="bezel"><div class="win"><img src="img/site-014.jpg" alt="A talk in the lounge"></div></div>
+      <h3>Upcoming events</h3><div class="board" id="board"><div class="r"><span>WED</span><span>4PM</span><span>Mox-Giving</span></div><div class="r"><span>WED</span><span>5PM</span><span>AI-Philosophy Writing Group</span></div><div class="r"><span>FRI</span><span>6PM</span><span>Band Setup + Practice</span></div><div class="r"><span>SAT</span><span>7PM</span><span>Mox-tunies! Live Band Karaoke</span></div><div class="r"><span>MON</span><span>7PM</span><span>SF Lean Meetup</span></div></div>
+      <div class="ft"><a class="key dark block" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">All events →</span></a></div></article>
+    <article class="pnl"><div class="hd"><span class="screw"></span><span class="lab">02</span><span class="screw"></span></div>
+      <div class="bezel"><div class="win"><img src="img/site-023.jpg" alt="A speaker presenting a chart"></div></div>
+      <h3>Who we gather</h3><div class="caps"><span class="cap">Startup founders</span><span class="cap">Effective altruists</span><span class="cap">Alignment researchers</span><span class="cap">Filmmakers</span><span class="cap">Writers</span><span class="cap">Musicians</span><span class="cap">Community builders</span><span class="cap">Hackers</span><span class="cap">Designers</span><span class="cap">Gamers</span></div>
+      <div class="ft"><a class="lnk" href="#humans">See people →</a></div></article>
+    <article class="pnl"><div class="hd"><span class="screw"></span><span class="lab">03</span><span class="screw"></span></div>
+      <div class="bezel"><div class="win"><img src="img/site-003.jpg" alt="A meeting room with a city view"></div></div>
       <h3>Space for meaningful work</h3>
       <div class="stack">
         <a class="key orange block" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Apply for membership</span></a>
         <a class="key block" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Inquire about offices</span></a>
         <a class="key block" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Buy a day pass</span></a>
       </div>
-      <div class="ft"><a class="lnk" href="#">Member portal →</a></div>
-    </article>
+      <div class="ft"><a class="lnk" href="#">Member portal →</a></div></article>
   </div>
 </div>
-
 <main class="col">
+  <section id="partners">
+    <span class="idx">PARTNER ORGS</span>
+    <p class="sub guest">Learn more about our <a href="#">guest program</a></p>
+    <div class="logos-panel"><div class="logos"><a class="lg tile" href="https://manifund.org/acx-grants"><img src="img/logo/acx.png" alt="ACX Grants"><span>ACX Grants</span></a><a class="lg white" href="https://intelligence.org/"><img src="img/logo/miri.png" alt="MIRI"></a><a class="lg white" href="https://far.ai/"><img src="img/logo/far.png" alt="FAR.AI"></a><a class="lg tile" href="https://elicit.com/"><img src="img/logo/elicit.png" alt="Elicit"><span>Elicit</span></a><a class="lg tile" href="https://aiimpacts.org/"><img src="img/logo/aiimpacts.png" alt="Impacts"><span>Impacts</span></a><a class="lg tile" href="https://rootsofprogress.org/"><img src="img/logo/rop.png" alt="Roots of Progress"><span>Roots of Progress</span></a><a class="lg tile" href="https://epoch.ai/"><img src="img/logo/epoch.png" alt="Epoch"><span>Epoch</span></a><a class="lg white bluedot" href="https://bluedot.org/"><img src="img/logo/bluedot.png" alt="BlueDot Impact"></a><a class="lg plain" href="https://www.lightconeinfrastructure.com/"><img src="img/logo/lightcone.png" alt="Lightcone"><span>Lightcone</span></a><a class="lg tile" href="https://seldonlab.com/"><img src="img/logo/seldon.png" alt="Seldon"><span>Seldon</span></a><a class="lg plain" href="https://governance.ai/"><img src="img/logo/govai.png" alt="GovAI"><span>GovAI</span></a><a class="lg plain" href="https://www.alignment.org/"><img src="img/logo/arc.png" alt="ARC"><span>ARC</span></a><a class="lg plain" href="https://redwoodresearch.org/"><img src="img/logo/redwood.png" alt="Redwood"><span>Redwood</span></a><a class="lg plain" href="https://palisaderesearch.org/"><img src="img/logo/palisade.png" alt="Palisade"><span>Palisade</span></a><a class="lg plain" href="https://timaeus.co/"><img src="img/logo/timaeus.png" alt="Timaeus"><span>Timaeus</span></a><a class="lg plain sentient" href="https://www.sentientfutures.ai/"><img src="img/logo/sentient.png" alt="Sentient Futures"></a></div></div>
+  </section>
   <section id="space">
-    <span class="idx">01 · THE SPACE</span>
-    <h2>Four floors on Mission Street.</h2>
-    <div class="sheet">
-      <figure><img src="img/site-024.jpg" alt="A crowded open floor during an event"><figcaption><span>01A</span><span>Open floor</span></figcaption></figure>
-      <figure><img src="img/site-006.jpg" alt="The lounge with plants and shelves"><figcaption><span>02A</span><span>Lounge</span></figcaption></figure>
-      <figure><img src="img/site-025.jpg" alt="A member and a kid playing a game on the floor"><figcaption><span>03A</span><span>Game day</span></figcaption></figure>
-      <figure><img src="img/site-005.jpg" alt="Rows of desks on the open floor"><figcaption><span>04A</span><span>Desks</span></figcaption></figure>
-      <figure><img src="img/site-009.jpg" alt="White chairs set up for a talk"><figcaption><span>05A</span><span>Talk setup</span></figcaption></figure>
-      <figure><img src="img/site-020.jpg" alt="Two people dancing on a rug"><figcaption><span>06A</span><span>After hours</span></figcaption></figure>
-    </div>
-    <div class="spec"><div><span class="lab">Members</span><b>215</b></div><div><span class="lab">Resident teams</span><b>21</b></div><div><span class="lab">Fellowships</span><b>4</b></div><div><span class="lab">Floors</span><b>4</b></div></div>
+    <span class="idx">THE SPACE</span>
+    <div class="sheet"><figure><img src="img/site-024.jpg" alt="A crowded open floor during an event"><figcaption><span>01A</span><span></span></figcaption></figure><figure><img src="img/site-002.jpg" alt="The lounge with grey sofas"><figcaption><span>02A</span><span></span></figcaption></figure><figure><img src="img/site-026.jpg" alt="A reading group around a table on a colorful rug"><figcaption><span>03A</span><span></span></figcaption></figure><figure><img src="img/site-007.jpg" alt="Wooden tables by sunny windows"><figcaption><span>04A</span><span></span></figcaption></figure><figure><img src="img/site-021.jpg" alt="Members making letters with their bodies in front of the green wall"><figcaption><span>05A</span><span></span></figcaption></figure><figure><img src="img/site-018.jpg" alt="Two members and a baby laughing"><figcaption><span>06A</span><span></span></figcaption></figure><figure><img src="img/site-025.jpg" alt="A member and a kid playing a game on the floor"><figcaption><span>07A</span><span></span></figcaption></figure><figure><img src="img/site-009.jpg" alt="White chairs set up for a talk"><figcaption><span>08A</span><span></span></figcaption></figure><figure><img src="img/site-016.jpg" alt="A member working in front of a projected screen"><figcaption><span>09A</span><span></span></figcaption></figure></div>
   </section>
-
   <section id="humans">
-    <span class="idx">02 · MOX HUMANS</span>
-    <h2>Who's in the building.</h2>
-    <div class="term" aria-label="Members and what they are into">
-      <div><span class="p">mox@1680</span>:~$ <span class="k">who --random</span></div>
-      <div id="log"></div>
-      <div><span class="p">mox@1680</span>:~$ <span class="c"></span></div>
-    </div>
+    <span class="idx">MOX HUMANS</span>
+    <p class="sub">215 members</p>
+    <div class="sub-h"><span>Staff</span></div>
+    <div class="staff"><article class="badge"><div class="bz"><img src="img/people/austin-chen.jpg" alt="Austin Chen"></div><span class="role">CEO OF MANIFUND</span><h4>Austin Chen</h4><p>is into <i>effective altruism funding</i> and <i>Catholic faith &amp; philosophy</i></p><div class="tags"><span class="k">contact for:</span><span>Strategic Partnerships</span><span>Custom Requests</span></div><span class="mail">austin@moxsf.com</span></article><article class="badge"><div class="bz"><img src="img/people/leilani-bellamy.jpg" alt="Leilani Bellamy"></div><span class="role">DIRECTOR</span><h4>Leilani Bellamy</h4><p>is into <i>Art of Accomplishment</i> and <i>niche bodywork</i></p><div class="tags"><span class="k">contact for:</span><span>Strategic Partnerships</span><span>Custom Requests</span><span>Events</span><span>Private Offices</span></div><span class="mail">leilani@moxsf.com</span></article><article class="badge"><div class="bz"><img src="img/people/carolina-oliveira.jpg" alt="Carolina Oliveira"></div><span class="role">COMMUNITY AND FELLOWSHIPS</span><h4>Carolina Oliveira</h4><div class="tags"><span class="k">contact for:</span><span>Global Expert Fellowship</span><span>Events</span><span>Fellowships</span><span>Strategic Partnerships</span><span>Membership</span><span>Private Offices</span></div><span class="mail">carolina@moxsf.com</span></article><article class="badge"><div class="bz"><img src="img/people/robin-goins.jpg" alt="Robin Goins"></div><span class="role">HEAD OF OPERATIONS</span><h4>Robin Goins</h4><p>is into <i>understanding understanding</i></p><div class="tags"><span class="k">contact for:</span><span>Venue Rental</span><span>Private Offices</span><span>Events</span><span>Membership</span><span>Member Events</span><span>Event support</span></div><span class="mail">robin@moxsf.com</span></article></div>
+    <div class="sub-h"><span>Members</span><a href="#" style="text-decoration:none;color:var(--ink)">See people →</a></div>
+    <div class="mgrid"><div class="mb"><img src="img/people/lily-shi.jpg" alt="Lily Shi"><p><small>Pivotal Fellows</small><b>Lily Shi</b>is into <i>LLM interpretability</i> and <i>dance</i></p></div><div class="mb"><img src="img/people/jez-ng.jpg" alt="Jez Ng"><p><small>Members</small><b>Jez Ng</b>is into <i>building the fastest mach-o linker</i> and <i>growing mushrooms</i></p></div><div class="mb"><img src="img/people/kara-presbrey.jpg" alt="Kara Presbrey"><p><small>Members</small><b>Kara Presbrey</b>is into <i>aligned BCI</i> and <i>scuba diving</i></p></div><div class="mb"><img src="img/people/haoxing-du.jpg" alt="Haoxing Du"><p><small>Surplus</small><b>Haoxing Du</b>is into <i>real-world agent traces</i> and <i>paragliding</i></p></div><div class="mb"><img src="img/people/kris-gulati.jpg" alt="Kris Gulati"><p><small>Members</small><b>Kris Gulati</b>is into <i>economics of AI</i> and <i>origami</i></p></div><div class="mb"><img src="img/people/leona-mollica.jpg" alt="Leona Mollica"><p><small>Members</small><b>Leona Mollica</b>is into <i>Decision theory foundations</i> and <i>Calligraphy</i></p></div><div class="mb"><img src="img/people/timothy-zhou.jpg" alt="Timothy Zhou"><p><small>Members</small><b>Timothy Zhou</b>is into <i>LLM jailbreak interpretability</i> and <i>composing chamber music</i></p></div><div class="mb"><img src="img/people/helen-tsim.jpg" alt="Helen Tsim"><p><small>The Frame</small><b>Helen Tsim</b>is into <i>AI safety communications</i> and <i>Improv Comedy</i></p></div><div class="mb"><img src="img/people/ran-sun.jpg" alt="Ran Sun"><p><small>Members</small><b>Ran Sun</b>is into <i>US/China AI Safety Coordination</i> and <i>Rock Climbing</i></p></div><div class="mb"><img src="img/people/william-jarrold.jpg" alt="William Jarrold"><p><small>Members</small><b>William Jarrold</b>is into <i>Mechanistic Interpretability</i> and <i>Jazz Piano</i></p></div><div class="mb"><img src="img/people/avi-sundaresan.jpg" alt="Avi Sundaresan"><p><small>Talarion</small><b>Avi Sundaresan</b>is into <i>world-state compression</i> and <i>espresso</i></p></div><div class="mb"><img src="img/people/tomas-guarna.jpg" alt="Tomás Guarna"><p><small>Members</small><b>Tomás Guarna</b>is into <i>Anthropology+History of Safety</i> and <i>Typefaces</i></p></div><div class="mb"><img src="img/people/max-feldman.jpg" alt="Max Feldman"><p><small>Members</small><b>Max Feldman</b>is into <i>Software Verification</i> and <i>Distance Running</i></p></div><div class="mb"><img src="img/people/aidan-kankyoku.jpg" alt="Aidan Kankyoku"><p><small>Sentient Futures</small><b>Aidan Kankyoku</b>is into <i>AI for animal welfare</i> and <i>Japanese tea ceremony</i></p></div><div class="mb"><img src="img/people/peter-chatain.jpg" alt="Peter Chatain"><p><small>Members</small><b>Peter Chatain</b>is into <i>agent foundations</i> and <i>olympic rowing</i></p></div><div class="mb"><img src="img/people/christine-shiba.jpg" alt="Christine Shiba"><p><small>Surplus</small><b>Christine Shiba</b>is into <i>social infrastructure</i> and <i>climbing</i></p></div><div class="mb"><img src="img/people/julie-steele.jpg" alt="Julie Steele"><p><small>Members</small><b>Julie Steele</b>is into <i>AI safety</i> and <i>dancing</i></p></div><div class="mb"><img src="img/people/keshav-shenoy.jpg" alt="Keshav Shenoy"><p><small>Members</small><b>Keshav Shenoy</b>is into <i>aligning ai models</i> and <i>birds</i></p></div><div class="mb"><img src="img/people/alan-tan.jpg" alt="Alan Tan"><p><small>Members</small><b>Alan Tan</b>is into <i>value learning</i> and <i>advanced meditation</i></p></div><div class="mb"><img src="img/people/hudson-mitchell-pullman.jpg" alt="Hudson Mitchell-Pullman"><p><small>Surplus</small><b>Hudson Mitchell-Pullman</b>is into <i>learning science</i> and <i>coffee (oatmilk lattes)</i></p></div></div>
   </section>
-
-  <section id="teams">
-    <span class="idx">03 · RESIDENTS</span>
-    <h2>Teams in the building.</h2>
-    <div class="tbl" role="table" aria-label="Resident teams">
-      <div class="r"><span>Sentient Futures</span><span>RM 408–409</span></div>
-      <div class="r"><span>Tabula Bio</span><span>RM 411</span></div>
-      <div class="r"><span>hum.ai</span><span>RM 404</span></div>
-      <div class="r"><span>Netholabs</span><span>RM 203</span></div>
-      <div class="r"><span>Tampersec</span><span>RM 304</span></div>
-      <div class="r"><span>Stardrift</span><span>RM 412</span></div>
-    </div>
-    <div class="partners"><span>ARC</span><span>Redwood</span><span>Palisade</span><span>Epoch</span><span>AI Impacts</span><span>GovAI</span><span>Elicit</span><span>Timaeus</span><span>Seldon</span><span>Lightcone</span><span>Roots of Progress</span><span>ACX Grants</span></div>
-  </section>
-
   <div class="final">
-    <span class="lab" style="color:#9EA1A4">04 · START</span>
-    <h2 style="margin-top:10px">Come work on what matters.</h2>
-    <p>Questions about fit? Write to robin@moxsf.com.</p>
-    <div class="ctas"><a class="key orange" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Apply for membership</span></a><a class="key" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Inquire about offices</span></a></div>
+    <div class="ctas" style="margin-top:0"><a class="key orange" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Apply for membership</span></a><a class="key" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Inquire about offices</span></a><a class="key" href="#"><span class="sh"></span><span class="ed"></span><span class="fc">Buy a day pass</span></a></div>
+    <p class="foot2" style="margin-top:22px">Questions? Contact <a href="#">robin@moxsf.com</a></p>
   </div>
 </main>
-<footer>A project of Manifund · Donate · 1680 Mission Street · San Francisco</footer>
-
+<footer>A project of Manifund · <a href="#">Donate</a></footer>
 <script>
 (function(){
-  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var ev=[["WED","4PM","MOX-GIVING"],["WED","5PM","AI-PHILOSOPHY"],["FRI","6PM","BAND PRACTICE"],["SAT","7PM","LIVE KARAOKE"],["MON","7PM","SF LEAN"]];
-  var b=document.getElementById('board');
-  ev.forEach(function(e){var r=document.createElement('div');r.className='r';r.innerHTML='<span>'+e[0]+'</span><span>'+e[1]+'</span><span>'+e[2]+'</span>';b.appendChild(r)});
-  if(!reduce){var rows=b.children,fi=0;setInterval(function(){var r=rows[fi%rows.length];r.classList.remove('flip');void r.offsetWidth;r.classList.add('flip');fi++},2600)}
-  var ppl=[["lily_shi","LLM interpretability","dance"],["leona_mollica","decision theory foundations","calligraphy"],["jez_ng","the fastest Mach-O linker","growing mushrooms"],["kris_gulati","economics of AI","origami"],["timothy_zhou","jailbreak interpretability","chamber music"],["ran_sun","US/China AI safety coordination","rock climbing"],["william_jarrold","mech interp","jazz piano"],["avi_sundaresan","world-state compression","espresso"],["haoxing_du","real-world agent traces","paragliding"],["max_feldman","software verification","distance running"]];
-  var log=document.getElementById('log'),pi=0;
-  function add(){var p=ppl[pi%ppl.length];pi++;var d=document.createElement('div');d.innerHTML='<span class="k">'+p[0]+'</span> → '+p[1]+' <span style="color:#7E8083">+</span> '+p[2];log.appendChild(d);while(log.children.length>8)log.removeChild(log.firstChild)}
-  for(var i=0;i<8;i++)add(); if(!reduce)setInterval(add,3400);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var rows=document.getElementById('board').children,fi=0;
+  setInterval(function(){var r=rows[fi%rows.length];r.classList.remove('flip');void r.offsetWidth;r.classList.add('flip');fi++},2600);
 })();
 </script>
-</body>
-</html>
+</body></html>
