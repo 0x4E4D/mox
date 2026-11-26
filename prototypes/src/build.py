@@ -80,6 +80,13 @@ a_css = css['a2'] + LOGO_CSS + '''
 .m small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 @media (max-width:760px){.staff,.mem{grid-template-columns:1fr}.sc{grid-template-columns:84px 1fr}.sc img{width:84px;height:84px}}
 footer a{color:inherit}
+.arrs{display:flex;flex-direction:column;gap:3px;padding-right:12px;border-right:1px solid #A9ACAF}
+.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:18px;height:13px;border-radius:2px}
+.arr svg{width:10px;height:8px;fill:#45484B;transition:fill .3s,filter .3s}
+.arr:hover svg{fill:#1E1B18}
+.arr.lit svg{fill:var(--signal);filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
+.arr:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+@media (max-width:480px){.elevator{gap:11px;padding:8px 12px}.elevator .lbl{min-width:0}}
 '''
 
 def a_build():
@@ -144,14 +151,20 @@ def a_build():
 </main>
 <footer>{FOOT_COPY}</footer>
 <nav class="elevator" aria-label="Sections">
+  <span class="arrs"><button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button><button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button></span>
   <a href="#partners" data-f="1">1</a><a href="#space" data-f="2">2</a><a href="#humans" data-f="3">3</a><a href="#offices" data-f="4">4</a>
   <span class="lbl" id="flbl">Lobby</span>
 </nav>
 <script>
 (function(){{
   var links=[].slice.call(document.querySelectorAll('.elevator a')),lbl=document.getElementById('flbl'),secs=[].slice.call(document.querySelectorAll('section[data-floor]'));
-  function upd(){{var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){{if(s.offsetTop<=mid){{f=+s.dataset.floor;n=s.dataset.name}}}});links.forEach(function(a){{a.classList.toggle('on',+a.dataset.f===f)}});lbl.textContent=n}}
-  addEventListener('scroll',upd,{{passive:true}});upd();
+  function upd(){{var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){{if(s.offsetTop<=mid){{f=+s.dataset.floor;n=s.dataset.name}}}});cur=f;links.forEach(function(a){{a.classList.toggle('on',+a.dataset.f===f)}});lbl.textContent=n}}
+  var up=document.getElementById('aup'),dn=document.getElementById('adn'),lastY=scrollY,cur=0,t;
+  function floorTop(f){{return f<=0?0:secs[f-1].getBoundingClientRect().top+scrollY-24}}
+  function go(f){{f=Math.max(0,Math.min(secs.length,f));scrollTo({{top:floorTop(f),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}})}}
+  up.onclick=function(){{go(cur+1)}};dn.onclick=function(){{go(cur-1)}};
+  function dir(){{var y=scrollY;if(Math.abs(y-lastY)>2){{up.classList.toggle('lit',y>lastY);dn.classList.toggle('lit',y<lastY);clearTimeout(t);t=setTimeout(function(){{up.classList.remove('lit');dn.classList.remove('lit')}},500)}}lastY=y}}
+  addEventListener('scroll',function(){{upd();dir()}},{{passive:true}});upd();
 }})();
 </script>
 </body></html>'''
@@ -447,7 +460,94 @@ def d_build():
     h = h.replace('</body></html>', js, 1)
     return h
 
-for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build)):
+# =====================================================================
+# E2 · D2 plus B2's departure board and pushable keys; one join panel up front
+# =====================================================================
+E_CSS = """
+/* E2: who we gather + space for meaningful work merged into one join console; events below on B2's departure board. */
+:root{--chassis:#E0E1E2;--panel:#F4F4F2;--screen:#0E0F0F;--amber:#FF8A2B;--signal-2:#B94204;--dots:"Doto","IBM Plex Mono",monospace}
+.key{--face:var(--panel);--edge:#A9ABAE;--txt:var(--ink);position:relative;display:block;border:0;padding:0;background:transparent;cursor:pointer;text-decoration:none;font:inherit;outline-offset:6px}
+.key .sh{position:absolute;inset:0;border-radius:9px;background:rgba(0,0,0,.22);transform:translateY(4px);filter:blur(4px);transition:transform .25s cubic-bezier(.3,.7,.4,1)}
+.key .ed{position:absolute;inset:0;border-radius:9px;background:var(--edge)}
+.key .fc{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px;border-radius:9px;background:var(--face);color:var(--txt);transform:translateY(-6px);transition:transform .25s cubic-bezier(.3,.7,.4,1);box-shadow:inset 0 1px 0 rgba(255,255,255,.45);text-align:left}
+.key:hover .fc{transform:translateY(-8px)}
+.key:hover .sh{transform:translateY(6px)}
+.key:active .fc{transform:translateY(-1px);transition-duration:34ms}
+.key:active .sh{transform:translateY(1px)}
+.key.orange{--face:var(--signal);--edge:var(--signal-2);--txt:#fff}
+.key.rust{--face:var(--rust);--edge:#4A1F03;--txt:#fff}
+.key.dark{--face:#2A2B2C;--edge:#0C0C0C;--txt:#F4F4F2}
+.key .t{font-family:var(--mono);font-size:13.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:500}
+.key .ar{font-family:var(--mono);font-size:18px;line-height:1}
+.key.big .fc{padding:24px 24px}
+.key.big .t{font-size:15px}
+.key.sm .fc{padding:11px 16px}
+.key.sm .t{font-size:11.5px}
+.console{position:relative;background:linear-gradient(180deg,#E9EAEA,#DCDDDE);border-radius:18px;padding:30px;display:grid;grid-template-columns:1.05fr 1fr;gap:30px;text-align:left;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #B3B5B8,0 40px 60px -40px rgba(30,27,24,.55),0 1px 0 #C4C6C8}
+.console .screw{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#9C9EA0);box-shadow:inset 0 0 0 1px #8D8F92}
+.console .screw:nth-of-type(1){left:12px;top:12px}.console .screw:nth-of-type(2){right:12px;top:12px}.console .screw:nth-of-type(3){left:12px;bottom:12px}.console .screw:nth-of-type(4){right:12px;bottom:12px}
+.console h3{font-size:28px;margin:0 0 16px;text-align:center}
+.bz{background:#1B1C1D;border-radius:10px;padding:7px;box-shadow:inset 0 0 0 1px #000}
+.bz img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px}
+.caps{display:grid;grid-template-columns:1fr 1fr;gap:10px 9px;margin-top:16px}
+.cap{background:var(--panel);border-radius:7px;padding:10px 8px 9px;text-align:center;font-size:15px;color:var(--ink);box-shadow:0 3px 0 #A9ABAE,inset 0 1px 0 #fff;transition:transform .12s,box-shadow .12s;user-select:none}
+.cap:hover{transform:translateY(2px);box-shadow:0 1px 0 #A9ABAE,inset 0 1px 0 #fff}
+.side{display:flex;flex-direction:column;gap:14px;border-left:1px solid #C4C6C8;padding-left:30px}
+.side .bz img{aspect-ratio:16/8}
+.keys{display:flex;flex-direction:column;gap:16px;margin-top:6px}
+.keys .pair{display:grid;grid-template-columns:1fr;gap:16px}
+.side .foot{margin-top:auto;padding-top:14px;border-top:1px solid #C4C6C8;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.side .foot a{color:var(--rust);text-decoration:none}
+.side .foot a:hover{text-decoration:underline}
+.evs{margin-top:34px;background:linear-gradient(180deg,#E9EAEA,#DCDDDE);border-radius:18px;padding:26px 30px 30px;text-align:left;position:relative;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 #B3B5B8,0 40px 60px -40px rgba(30,27,24,.55),0 1px 0 #C4C6C8;display:grid;grid-template-columns:270px 1fr;gap:26px;align-items:stretch}
+.evs h3{font-size:28px;margin:0 0 14px}
+.evs .l{display:flex;flex-direction:column}
+.evs .l .bz{flex:1}
+.evs .l .bz img{height:100%;aspect-ratio:auto;min-height:160px}
+.board{border:7px solid #1B1C1D;background:var(--screen);border-radius:8px;padding:14px 18px;font-family:var(--dots);font-weight:700;font-size:19px;line-height:1.9;color:var(--amber);text-shadow:0 0 6px rgba(255,138,43,.6);text-transform:uppercase;box-shadow:inset 0 0 0 1px #000;position:relative;overflow:hidden}
+.board::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);pointer-events:none}
+.board .hd{display:grid;grid-template-columns:3em 3.4em 1fr;gap:12px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.14em;color:#8C6A4D;text-shadow:none;border-bottom:1px solid #2A2B2C;padding-bottom:4px;margin-bottom:4px}
+.board .r{display:grid;grid-template-columns:3em 3.4em 1fr;gap:12px;border-bottom:1px dashed #1F2020}
+.board .r:last-child{border-bottom:0}
+.board .r.flip span:last-child{animation:flip .5s steps(3)}
+@keyframes flip{0%{opacity:.1}50%{opacity:.6}100%{opacity:1}}
+.evs .ft{margin-top:16px;display:flex;justify-content:flex-end}
+.evs .ft .key{display:inline-block}
+@media (max-width:860px){.console{grid-template-columns:1fr;padding:24px 18px 26px}.side{border-left:0;padding-left:0;border-top:1px solid #C4C6C8;padding-top:22px}.evs{grid-template-columns:1fr;padding:22px 18px 24px}.evs .l .bz{flex:none}.evs .l .bz img{aspect-ratio:16/9;height:auto;min-height:0}.side .bz{display:none}}
+@media (max-width:480px){.board{font-size:15px;padding:10px 12px}.board .r,.board .hd{grid-template-columns:2.6em 3em 1fr;gap:8px}.cap{font-size:14px}}
+"""
+
+def key(cls, label, href='#'):
+    return f'<a class="key {cls}" href="{href}"><span class="sh"></span><span class="ed"></span><span class="fc"><span class="t">{label}</span><span class="ar" aria-hidden="true">→</span></span></a>'
+
+def e_build():
+    h = d_build().replace('Mox · D2 · The Building, in full', 'Mox · E2 · Building first, join up front')
+    h = h.replace('</style>', E_CSS + '</style>', 1)
+    h = h.replace('<head>', '<head><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Doto:wght@700&display=swap">', 1)
+    i = h.index('<div class="three">'); j = h.index('</div>\n</div>\n<main', i)
+    caps = ''.join(f'<span class="cap">{g}</span>' for g in GATHER)
+    rows = ''.join(f'<div class="r"><span>{d}</span><span>{t.upper()}</span><span>{n}</span></div>' for d, t, n in EVENTS)
+    block = f"""<div class="console rv">
+      <span class="screw"></span><span class="screw"></span><span class="screw"></span><span class="screw"></span>
+      <div class="gather"><h3>Who we gather</h3><div class="bz"><img src="img/site-021.jpg" alt="Members making letters with their bodies in front of the green wall"></div><div class="caps">{caps}</div></div>
+      <div class="side"><h3>Space for meaningful work</h3><div class="bz"><img src="img/site-003.jpg" alt="A meeting room with a city view"></div>
+        <div class="keys">{key('orange big','Apply for membership')}{key('rust','Buy a day pass')}{key('sm','Inquire about offices')}</div>
+        <div class="foot"><a href="#humans">See people →</a><a href="#">Member portal →</a></div></div>
+    </div>
+    <div class="evs rv"><span class="screw" style="position:absolute;left:12px;top:12px"></span>
+      <div class="l"><h3>Upcoming events</h3><div class="bz"><img src="img/site-014.jpg" alt="A talk in the lounge"></div></div>
+      <div><div class="board" id="board" role="table" aria-label="Upcoming events"><div class="hd"><span>DAY</span><span>TIME</span><span>EVENT</span></div>{rows}</div>
+      <div class="ft">{key('dark sm','All events')}</div></div>
+    </div>"""
+    h = h[:i] + block + h[j:]
+    flick = """<script>(function(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var rows=document.querySelectorAll('#board .r'),i=0;setInterval(function(){var r=rows[i%rows.length];r.classList.remove('flip');void r.offsetWidth;r.classList.add('flip');i++},2600)})();</script>
+</body>"""
+    h = h.replace('</body>', flick, 1)
+    return h
+
+for name, fn in (('a2', a_build), ('b2', b_build), ('c2', c_build), ('d2', d_build), ('e2', e_build)):
     open(f'{D}/site/{name}.html', 'w').write(fn())
-import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2')])
+import subprocess;subprocess.run(['python3',f'{D}/backbtn.py']+[f'{D}/site/{n}.html' for n in ('a2','b2','c2','d2','e2')])
 print('ok')

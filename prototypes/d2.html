@@ -177,6 +177,13 @@ html,body{overflow-x:clip}
 .m small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
 @media (max-width:760px){.staff,.mem{grid-template-columns:1fr}.sc{grid-template-columns:84px 1fr}.sc img{width:84px;height:84px}}
 footer a{color:inherit}
+.arrs{display:flex;flex-direction:column;gap:3px;padding-right:12px;border-right:1px solid #A9ACAF}
+.arr{all:unset;cursor:pointer;display:grid;place-items:center;width:18px;height:13px;border-radius:2px}
+.arr svg{width:10px;height:8px;fill:#45484B;transition:fill .3s,filter .3s}
+.arr:hover svg{fill:#1E1B18}
+.arr.lit svg{fill:var(--signal);filter:drop-shadow(0 0 4px rgba(235,88,9,.8))}
+.arr:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+@media (max-width:480px){.elevator{gap:11px;padding:8px 12px}.elevator .lbl{min-width:0}}
 
 /* D2: the first screen is only the lockup, the tagline and the whole building. Content rises in as you scroll. */
 .bg{position:fixed;left:50%;top:var(--bt,240px);width:var(--bw,600px);transform:translateX(-50%);z-index:0;transition:opacity .2s linear}
@@ -252,14 +259,20 @@ footer{background:var(--paper)}
 </main>
 <footer>A project of Manifund · <a href="#">Donate</a></footer>
 <nav class="elevator" aria-label="Sections">
+  <span class="arrs"><button class="arr" id="aup" type="button" aria-label="Up one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 0 10 8H0z"/></svg></button><button class="arr" id="adn" type="button" aria-label="Down one floor"><svg viewBox="0 0 10 8" aria-hidden="true"><path d="M5 8 0 0h10z"/></svg></button></span>
   <a href="#partners" data-f="1">1</a><a href="#space" data-f="2">2</a><a href="#humans" data-f="3">3</a><a href="#offices" data-f="4">4</a>
   <span class="lbl" id="flbl">Lobby</span>
 </nav>
 <script>
 (function(){
   var links=[].slice.call(document.querySelectorAll('.elevator a')),lbl=document.getElementById('flbl'),secs=[].slice.call(document.querySelectorAll('section[data-floor]'));
-  function upd(){var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){if(s.getBoundingClientRect().top+scrollY<=mid){f=+s.dataset.floor;n=s.dataset.name}});links.forEach(function(a){a.classList.toggle('on',+a.dataset.f===f)});lbl.textContent=n}
-  addEventListener('scroll',upd,{passive:true});upd();
+  function upd(){var mid=scrollY+innerHeight*.5,f=0,n='Lobby';secs.forEach(function(s){if(s.getBoundingClientRect().top+scrollY<=mid){f=+s.dataset.floor;n=s.dataset.name}});cur=f;links.forEach(function(a){a.classList.toggle('on',+a.dataset.f===f)});lbl.textContent=n}
+  var up=document.getElementById('aup'),dn=document.getElementById('adn'),lastY=scrollY,cur=0,t;
+  function floorTop(f){return f<=0?0:secs[f-1].getBoundingClientRect().top+scrollY-24}
+  function go(f){f=Math.max(0,Math.min(secs.length,f));scrollTo({top:floorTop(f),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+  up.onclick=function(){go(cur+1)};dn.onclick=function(){go(cur-1)};
+  function dir(){var y=scrollY;if(Math.abs(y-lastY)>2){up.classList.toggle('lit',y>lastY);dn.classList.toggle('lit',y<lastY);clearTimeout(t);t=setTimeout(function(){up.classList.remove('lit');dn.classList.remove('lit')},500)}lastY=y}
+  addEventListener('scroll',function(){upd();dir()},{passive:true});upd();
 })();
 </script>
 
